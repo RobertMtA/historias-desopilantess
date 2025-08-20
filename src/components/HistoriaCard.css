@@ -424,23 +424,27 @@
 /* Responsive para modal */
 @media (max-width: 768px) {
   .historia-modal {
-    padding: 0;
-    align-items: flex-start;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    padding: 0 !important;
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
     display: flex !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    max-height: none !important;
   }
   
   .modal-content {
-    width: 100vw;
-    max-width: none;
-    max-height: none;
-    min-height: 100vh;
-    margin: 0;
-    border-radius: 0;
-    overflow: visible;
-    display: block;
-    position: relative;
+    width: 100vw !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    position: relative !important;
   }
   
   .modal-close-btn {
@@ -484,23 +488,37 @@
   }
   
   .modal-body {
-    padding: 20px;
-    overflow: visible;
-    width: 100%;
-    box-sizing: border-box;
-    display: block;
+    padding: 20px !important;
+    overflow: visible !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    max-height: none !important;
+    height: auto !important;
+    min-height: auto !important;
   }
   
   .modal-body .modal-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    color: #e5e5e5;
-    margin-bottom: 20px;
-    display: block;
-    white-space: pre-wrap;
-    max-width: 100%;
+    font-size: 1.1rem !important;
+    line-height: 1.8 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    color: #e5e5e5 !important;
+    margin-bottom: 20px !important;
+    display: block !important;
+    white-space: pre-wrap !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-clamp: unset !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    text-align: justify !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   }
   
   .modal-image-container {

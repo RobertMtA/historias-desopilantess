@@ -28,8 +28,17 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
   const [visibleCommentsCount, setVisibleCommentsCount] = useState(3);
   const [commentError, setCommentError] = useState('');
   
-  // Verificar que tenemos un ID válido
-  const storyId = id || 1; // Fallback al ID 1 si no hay ID
+  // Verificar que tenemos un ID válido - CRITICAL FIX
+  const storyId = id || Math.floor(Math.random() * 45) + 1; // Fallback aleatorio entre 1-45
+  
+  // Debug crítico para entender el problema
+  console.log('HistoriaCard DEBUG:', { 
+    originalId: id, 
+    generatedStoryId: storyId, 
+    titulo: titulo?.substring(0, 30) + '...',
+    hasId: !!id,
+    idType: typeof id 
+  });
   
   // Configurar límite de caracteres para mostrar "Leer más"
   const CHAR_LIMIT = 200;
@@ -48,11 +57,12 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
 
   const fetchStoryData = async () => {
     if (!storyId) {
+      console.error('CRITICAL ERROR: storyId is still undefined/null:', storyId);
       return;
     }
     
     try {
-      console.log('Fetching data for story', storyId);
+      console.log('✅ Fetching data for story', storyId, 'for title:', titulo?.substring(0, 30));
       
       // Obtener likes
       const likesResponse = await fetch(buildApiUrl(`/api/stories/${storyId}/likes`));

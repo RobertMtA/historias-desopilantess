@@ -71,40 +71,67 @@ const Contacto = () => {
     }
     
     setIsSubmitting(true);
+    console.log('🚀 Iniciando envío de formulario de contacto...');
+    console.log('📋 Datos del formulario:', formData);
+    
+    // Crear AbortController para timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 segundos timeout
     
     try {
-      const response = await fetch(buildApiUrl('/api/contact'), {
+      const apiUrl = buildApiUrl('/api/contact');
+      console.log('🔗 URL de la API:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        signal: controller.signal
       });
       
+      clearTimeout(timeoutId);
+      console.log('📡 Respuesta recibida - Status:', response.status);
+      
+      if (!response.ok) {
+        console.error('❌ Error HTTP:', response.status, response.statusText);
+      }
+      
       const data = await response.json();
+      console.log('📦 Datos de respuesta:', data);
       
       if (response.ok) {
         setSubmitStatus('success');
         setFormData({ nombre: '', email: '', asunto: '', mensaje: '', tipoConsulta: 'general' });
         setErrors({});
+        console.log('✅ Mensaje enviado exitosamente');
         
         // Limpiar el mensaje después de 5 segundos
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
         setSubmitStatus('error');
-        console.error('Error del servidor:', data.error);
+        console.error('❌ Error del servidor:', data.error);
         
         // Limpiar el mensaje después de 5 segundos
         setTimeout(() => setSubmitStatus(null), 5000);
       }
     } catch (error) {
-      console.error('Error de conexión:', error);
-      setSubmitStatus('error');
+      clearTimeout(timeoutId);
+      
+      if (error.name === 'AbortError') {
+        console.error('⏱️ Timeout: El servidor tardó demasiado en responder');
+        setSubmitStatus('timeout');
+      } else {
+        console.error('🔌 Error de conexión:', error);
+        setSubmitStatus('error');
+      }
       
       // Limpiar el mensaje después de 5 segundos
       setTimeout(() => setSubmitStatus(null), 5000);
     } finally {
       setIsSubmitting(false);
+      console.log('🏁 Finalizando envío de formulario');
     }
   };
 
@@ -168,6 +195,18 @@ const Contacto = () => {
                   <div className="error-content">
                     <h3>Error al enviar mensaje</h3>
                     <p>Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo o contáctanos directamente.</p>
+                  </div>
+                </div>
+              )}
+
+              {submitStatus === 'timeout' && (
+                <div className="error-message-improved">
+                  <div className="error-icon">
+                    <FaClock />
+                  </div>
+                  <div className="error-content">
+                    <h3>Tiempo de espera agotado</h3>
+                    <p>El servidor está tardando mucho en responder. Por favor, inténtalo de nuevo en unos minutos o contáctanos directamente.</p>
                   </div>
                 </div>
               )}

@@ -1,0 +1,426 @@
+/* ====================================
+   EFECTOS DE TERROR HISTÓRICO
+   Parallax, Overlays y Animaciones
+   ==================================== */
+
+/* Importar fuentes de terror desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Butcherman&family=Chonburi&display=swap');
+
+/* Variables CSS para el tema de terror */
+:root {
+  --terror-red: #8B0000;
+  --blood-red: #CC0000;
+  --dark-red: #4D0000;
+  --shadow-black: rgba(0, 0, 0, 0.8);
+  --mist-white: rgba(255, 255, 255, 0.1);
+  --ancient-gold: #D4AF37;
+  --bone-white: #F5F5DC;
+  --rust-brown: #B7410E;
+}
+
+/* Hero Section con efectos de terror */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fondo con múltiples capas para efecto de profundidad */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Aquí irá tu imagen principal de terror histórico */
+  background-image: 
+    url('ruta-a-tu-imagen-principal.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Efecto parallax */
+  z-index: 1;
+}
+
+/* Overlay de gradiente para crear atmósfera siniestra */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    var(--terror-red) 0%,
+    rgba(139, 0, 0, 0.8) 25%,
+    rgba(0, 0, 0, 0.9) 50%,
+    rgba(77, 0, 0, 0.7) 75%,
+    var(--dark-red) 100%
+  );
+  z-index: 2;
+}
+
+/* Partículas flotantes de sangre/polvo */
+.hero-section .blood-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-section .blood-particles::before,
+.hero-section .blood-particles::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--blood-red);
+  border-radius: 50%;
+  animation: floating-particles 15s infinite linear;
+}
+
+.hero-section .blood-particles::before {
+  top: -5px;
+  left: 20%;
+  animation-delay: -2s;
+}
+
+.hero-section .blood-particles::after {
+  top: -5px;
+  right: 30%;
+  animation-delay: -8s;
+}
+
+/* Contenido del hero con efectos */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem;
+  background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semi-transparente para texto amarillo */
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Título con efecto de sangre goteando */
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-family: 'Creepster', 'Georgia', serif;
+  color: #FFFF00;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 20px var(--blood-red),
+    1px 1px 0px #000000;
+  margin-bottom: 2rem;
+  position: relative;
+  animation: blood-drip-glow 3s ease-in-out infinite alternate;
+  font-weight: bold;
+}
+
+/* Efecto de goteo de sangre en el título */
+.hero-content h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, var(--blood-red), transparent);
+  animation: drip-animation 4s ease-in-out infinite;
+}
+
+/* Subtítulo con efectos de niebla */
+.hero-content p {
+  font-size: 1.4rem;
+  color: #FFD700;
+  text-shadow: 
+    2px 2px 3px rgba(0, 0, 0, 0.8),
+    1px 1px 0px #000000;
+  opacity: 1;
+  margin-bottom: 3rem;
+  position: relative;
+  animation: mist-effect 6s ease-in-out infinite;
+  font-weight: 600;
+}
+
+/* Contenedor de búsqueda con efectos góticos */
+.search-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 5;
+}
+
+.search-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--ancient-gold), var(--blood-red), var(--ancient-gold));
+  border-radius: 50px;
+  z-index: -1;
+  animation: border-glow 2s ease-in-out infinite alternate;
+}
+
+.search-box {
+  background: rgba(20, 20, 20, 0.9);
+  border: 2px solid var(--rust-brown);
+  border-radius: 50px;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  color: var(--bone-white);
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(139, 0, 0, 0.3);
+}
+
+.search-box::placeholder {
+  color: rgba(245, 245, 220, 0.6);
+}
+
+.search-box:focus {
+  outline: none;
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.5),
+    0 0 25px var(--blood-red),
+    0 0 35px rgba(139, 0, 0, 0.5);
+  border-color: var(--blood-red);
+}
+
+/* Animación de partículas flotantes */
+@keyframes floating-particles {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* Animación de brillo sanguinolento */
+@keyframes blood-drip-glow {
+  0% {
+    text-shadow: 
+      2px 2px 4px var(--shadow-black),
+      0 0 20px var(--blood-red);
+  }
+  100% {
+    text-shadow: 
+      2px 2px 8px var(--shadow-black),
+      0 0 30px var(--blood-red),
+      0 0 40px rgba(139, 0, 0, 0.8);
+  }
+}
+
+/* Animación de goteo */
+@keyframes drip-animation {
+  0%, 80% {
+    height: 0;
+    opacity: 0;
+  }
+  90% {
+    height: 20px;
+    opacity: 1;
+  }
+  100% {
+    height: 30px;
+    opacity: 0;
+  }
+}
+
+/* Efecto de niebla */
+@keyframes mist-effect {
+  0%, 100% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-5px);
+  }
+}
+
+/* Brillo del borde dorado */
+@keyframes border-glow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Secciones con efectos de pergamino antiguo */
+.featured-section,
+.recent-section,
+.categories-section {
+  position: relative;
+  background: 
+    linear-gradient(
+      135deg,
+      rgba(245, 245, 220, 0.05) 0%,
+      rgba(139, 69, 19, 0.1) 50%,
+      rgba(245, 245, 220, 0.05) 100%
+    );
+  backdrop-filter: blur(1px);
+}
+
+.featured-section::before,
+.recent-section::before,
+.categories-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Aquí puedes agregar texturas de pergamino como fondo */
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+  z-index: -1;
+}
+
+/* Efectos hover para tarjetas de historia */
+.historia-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.historia-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(139, 0, 0, 0.2);
+  border-color: var(--rust-brown);
+}
+
+/* Efecto de máscara para imágenes */
+.historia-card img {
+  transition: all 0.3s ease;
+  filter: sepia(20%) contrast(1.1);
+}
+
+.historia-card:hover img {
+  filter: sepia(40%) contrast(1.3) brightness(1.1);
+}
+
+/* Iconos con efectos de metal oxidado */
+.section-icon {
+  color: var(--rust-brown);
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
+}
+
+.section-icon:hover {
+  color: var(--ancient-gold);
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+  transform: scale(1.1);
+}
+
+/* Efectos responsive para móvil */
+@media (max-width: 768px) {
+  .hero-section::before {
+    background-attachment: scroll; /* Mejor performance en móvil */
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      0 0 15px var(--blood-red),
+      1px 1px 0px #000000;
+  }
+  
+  .hero-content p {
+    font-size: 1.1rem;
+    text-shadow: 
+      2px 2px 3px rgba(0, 0, 0, 0.9),
+      1px 1px 0px #000000;
+  }
+}
+
+/* Efectos de carga con esqueleto siniestro */
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 69, 19, 0.1) 25%,
+    rgba(139, 0, 0, 0.1) 50%,
+    rgba(139, 69, 19, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Cursor personalizado para el tema de terror */
+.hero-section,
+.hero-section * {
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M16 2 L20 12 L30 16 L20 20 L16 30 L12 20 L2 16 L12 12 Z" fill="%23CC0000" stroke="%23000" stroke-width="1"/></svg>'), auto;
+}
+
+/* Efectos de texto con sombras múltiples */
+.section-title {
+  font-family: 'Creepster', 'Georgia', serif;
+  color: var(--dark-red);
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    3px 3px 6px rgba(139, 0, 0, 0.3);
+}
+
+/* Botones con efecto de metal oxidado */
+.cta-button {
+  background: linear-gradient(145deg, var(--rust-brown), var(--dark-red));
+  color: var(--bone-white);
+  border: 2px solid var(--ancient-gold);
+  padding: 12px 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.cta-button:hover {
+  background: linear-gradient(145deg, var(--ancient-gold), var(--blood-red));
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.3);
+}

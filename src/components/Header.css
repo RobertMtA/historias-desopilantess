@@ -1,0 +1,440 @@
+/* Header.css */
+
+/* Estilos base del header */
+.header {
+  position: fixed;
+  width: 100%;
+  z-index: 50;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-default {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  padding: 0.5rem 0;
+}
+
+.header-scrolled {
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem 0;
+}
+
+/* Contenedor principal */
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 4rem;
+}
+
+/* Logo y marca */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.header-icon {
+  font-size: 1.875rem;
+  transition: color 0.3s ease;
+}
+
+.header-icon-default {
+  color: white;
+}
+
+.header-icon-scrolled {
+  color: #1f2937;
+}
+
+/* Estilos para el logo de imagen */
+.header-logo-img {
+  height: auto;
+  transition: all 0.3s ease;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.header-logo-default {
+  height: 3.5rem;
+  /* Removemos el filtro que hacía la imagen invisible */
+}
+
+.header-logo-scrolled {
+  height: 2.5rem;
+  filter: none;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.header-title-default {
+  color: white;
+}
+
+.header-title-scrolled {
+  color: #1f2937;
+}
+
+/* Navegación desktop */
+.header-nav {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .header-nav {
+    display: flex;
+  }
+}
+
+.nav-link {
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.nav-link-default {
+  color: white;
+}
+
+.nav-link-default:hover {
+  color: #fde68a;
+}
+
+.nav-link-scrolled {
+  color: #374151;
+}
+
+.nav-link-scrolled:hover {
+  color: #8b5cf6;
+}
+
+.nav-link-active.nav-link-default {
+  color: #fde68a;
+}
+
+.nav-link-active.nav-link-scrolled {
+  color: #8b5cf6;
+}
+
+/* Barra de búsqueda */
+.header-search {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .header-search {
+    display: flex;
+  }
+}
+
+.search-form {
+  position: relative;
+}
+
+.search-input {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding-right: 2.5rem;
+  border-radius: 9999px;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 250px;
+}
+
+.search-input-default {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+}
+
+.search-input-default::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.search-input-default:focus {
+  box-shadow: 0 0 0 2px #fde68a;
+}
+
+.search-input-scrolled {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.search-input-scrolled:focus {
+  box-shadow: 0 0 0 2px #8b5cf6;
+}
+
+.search-button {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  color: #374151;
+}
+
+.search-button-default {
+  color: #f3f4f6;
+}
+
+.search-button-scrolled {
+  color: #374151;
+}
+
+/* Botón de menú móvil */
+.mobile-menu-button {
+  display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+.mobile-menu-icon {
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu-icon-default {
+  color: white;
+}
+
+.mobile-menu-icon-scrolled {
+  color: #1f2937;
+}
+
+/* Menú móvil */
+.mobile-menu {
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+.mobile-menu-default {
+  background: #3b82f6;
+}
+
+.mobile-menu-scrolled {
+  background: white;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1rem;
+}
+
+.mobile-nav-link {
+  padding: 0.5rem 0;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-link-default {
+  color: white;
+}
+
+.mobile-nav-link-scrolled {
+  color: #374151;
+}
+
+.mobile-nav-link-active.mobile-nav-link-default {
+  color: #fde68a;
+}
+
+.mobile-nav-link-active.mobile-nav-link-scrolled {
+  color: #8b5cf6;
+}
+
+/* Búsqueda móvil */
+.mobile-search {
+  padding: 0 1rem;
+  margin-top: 0.75rem;
+}
+
+.mobile-search-form {
+  position: relative;
+}
+
+.mobile-search-input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding-right: 2.5rem;
+  border-radius: 9999px;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.mobile-search-input-default {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+}
+
+.mobile-search-input-default::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-search-input-scrolled {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.mobile-search-button {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #374151;
+}
+
+.mobile-search-button-default {
+  color: #f3f4f6;
+}
+
+.mobile-search-button-scrolled {
+  color: #374151;
+}
+
+/* Estados del header */
+.header-scrolled {
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+}
+
+.header-transparent {
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  padding: 1rem 0;
+}
+
+/* Colores para el estado normal (transparente) */
+.header-transparent .header-logo,
+.header-transparent .header-title,
+.header-transparent .nav-link,
+.header-transparent .search-button {
+  color: white;
+}
+
+.header-transparent .search-input {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+}
+
+.header-transparent .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header-transparent .nav-link.active {
+  color: #fbbf24;
+}
+
+/* Colores para el estado con scroll */
+.header-scrolled .header-logo {
+  color: #8b5cf6;
+}
+
+.header-scrolled .header-title {
+  color: #1f2937;
+}
+
+.header-scrolled .nav-link {
+  color: #4b5563;
+}
+
+.header-scrolled .nav-link:hover,
+.header-scrolled .nav-link.active {
+  color: #8b5cf6;
+}
+
+.header-scrolled .search-input {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.header-scrolled .search-button {
+  color: #6b7280;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu.open {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Efecto hover para móviles */
+@media (hover: hover) {
+  .nav-link:hover {
+    transform: translateY(-2px);
+  }
+  
+  .search-button:hover {
+    opacity: 0.8;
+  }
+}
+
+/* Mejoras de accesibilidad */
+button:focus,
+input:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Transiciones suaves para elementos interactivos */
+button,
+a,
+input {
+  transition: all 0.2s ease;
+}

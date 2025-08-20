@@ -1,0 +1,71 @@
+.video-embed {
+  margin: 0 auto 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px; /* Limitamos el ancho máximo */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-embed:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.video-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  text-align: center;
+}
+
+.video-responsive {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .video-embed {
+    max-width: 100%;
+    margin: 0 auto 15px;
+  }
+  
+  .video-title {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-embed {
+    border-radius: 8px;
+  }
+  
+  .video-title {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+  
+  .video-responsive {
+    padding-bottom: 56.25%; /* Mantenemos 16:9 pero más compacto */
+  }
+}

@@ -1,0 +1,41 @@
+<!-- Favicon SVG para Historias Desopilantes -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="50%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="32" cy="32" r="30" fill="url(#bg)" filter="url(#glow)"/>
+  
+  <!-- Main Icon - Speech Bubble with Star -->
+  <g transform="translate(12, 12)">
+    <!-- Speech Bubble -->
+    <path d="M6 8 C6 4, 10 0, 20 0 C30 0, 34 4, 34 8 C34 12, 30 16, 20 16 L12 16 L6 22 Z" 
+          fill="white" opacity="0.95"/>
+    
+    <!-- Sparkle/Star in bubble -->
+    <g transform="translate(20, 8)">
+      <path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z" 
+            fill="#3b82f6"/>
+      <!-- Smaller sparkles -->
+      <circle cx="-6" cy="-2" r="1" fill="#8b5cf6"/>
+      <circle cx="6" cy="2" r="1" fill="#ec4899"/>
+      <circle cx="-3" cy="4" r="0.5" fill="#f59e0b"/>
+    </g>
+    
+    <!-- Additional decorative elements -->
+    <circle cx="8" cy="6" r="1.5" fill="#fbbf24" opacity="0.7"/>
+    <circle cx="28" cy="10" r="1" fill="#10b981" opacity="0.8"/>
+  </g>
+</svg>

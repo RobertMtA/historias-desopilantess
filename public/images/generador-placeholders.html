@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Imágenes Placeholder</title>
+    <style>
+        body { 
+            font-family: 'Creepster', cursive; 
+            background: linear-gradient(135deg, #1a1a1a, #2d1b25); 
+            color: #e5e5e5; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px; }
+        .image-card { 
+            background: linear-gradient(135deg, #2d1b25, #1a1a1a); 
+            border: 2px solid rgba(139, 0, 0, 0.3); 
+            border-radius: 15px; 
+            padding: 20px; 
+            text-align: center;
+        }
+        canvas { 
+            border: 2px solid rgba(139, 0, 0, 0.3); 
+            border-radius: 10px; 
+            margin: 10px 0;
+            filter: sepia(20%) contrast(1.1) brightness(0.9);
+        }
+        .download-btn { 
+            background: linear-gradient(45deg, #8b0000, #dc143c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover { 
+            background: linear-gradient(45deg, #a50000, #ff1744);
+            transform: translateY(-2px);
+        }
+        h1 { 
+            text-align: center; 
+            color: #ff6b6b; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Generador de Imágenes Placeholder</h1>
+        <p class="subtitle">Para Historias Desopilantes</p>
+        
+        <div class="image-grid">
+            <div class="image-card">
+                <h3>👑 El Rey que Declaró Guerra al Mar</h3>
+                <canvas id="rey-mar" width="400" height="300"></canvas>
+                <div>
+                    <button class="download-btn" onclick="descargarImagen('rey-mar', 'rey-guerra-mar.jpg')">
+                        Descargar JPG
+                    </button>
+                </div>
+            </div>
+            
+            <div class="image-card">
+                <h3>🥖 La Batalla de los Pasteles</h3>
+                <canvas id="batalla-pasteles" width="400" height="300"></canvas>
+                <div>
+                    <button class="download-btn" onclick="descargarImagen('batalla-pasteles', 'batalla-pasteles.jpg')">
+                        Descargar JPG
+                    </button>
+                </div>
+            </div>
+            
+            <div class="image-card">
+                <h3>🎖️ Desfile Militar Corto</h3>
+                <canvas id="desfile-corto" width="400" height="300"></canvas>
+                <div>
+                    <button class="download-btn" onclick="descargarImagen('desfile-corto', 'desfile-corto.jpg')">
+                        Descargar JPG
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: rgba(139, 0, 0, 0.1); border-radius: 10px; text-align: center;">
+            <h2>📋 Instrucciones:</h2>
+            <p>1. Haz clic en "Descargar JPG" para cada imagen</p>
+            <p>2. Guarda los archivos en: <code>public/images/</code></p>
+            <p>3. Los nombres deben coincidir exactamente con los del código</p>
+            <p style="color: #ff6b6b;">💡 Estas son imágenes temporales. Reemplázalas con imágenes reales cuando las tengas.</p>
+        </div>
+    </div>
+
+    <script>
+        // Función para crear gradiente vintage
+        function crearGradienteVintage(ctx, width, height, colores) {
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            colores.forEach((color, index) => {
+                gradient.addColorStop(index / (colores.length - 1), color);
+            });
+            return gradient;
+        }
+        
+        // Rey Guerra al Mar
+        function dibujarReyMar() {
+            const canvas = document.getElementById('rey-mar');
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo vintage
+            const gradiente = crearGradienteVintage(ctx, 400, 300, ['#4a3728', '#6d4c36', '#8f6c45']);
+            ctx.fillStyle = gradiente;
+            ctx.fillRect(0, 0, 400, 300);
+            
+            // Mar (ondas)
+            ctx.fillStyle = '#2c5aa0';
+            ctx.beginPath();
+            ctx.moveTo(0, 200);
+            for (let x = 0; x <= 400; x += 20) {
+                ctx.lineTo(x, 200 + Math.sin(x * 0.05) * 15);
+            }
+            ctx.lineTo(400, 300);
+            ctx.lineTo(0, 300);
+            ctx.fill();
+            
+            // Rey (silueta)
+            ctx.fillStyle = '#2c1810';
+            ctx.fillRect(180, 100, 40, 100);
+            
+            // Corona
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(175, 90, 50, 15);
+            ctx.fillRect(185, 75, 10, 15);
+            ctx.fillRect(200, 75, 10, 15);
+            
+            // Espada
+            ctx.strokeStyle = '#c0c0c0';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(220, 120);
+            ctx.lineTo(260, 80);
+            ctx.stroke();
+            
+            // Texto
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('👑 GUERRA AL MAR', 200, 40);
+            ctx.font = '16px Arial';
+            ctx.fillText('España 1967', 200, 260);
+        }
+        
+        // Batalla de Pasteles
+        function dibujarBatallaPasteles() {
+            const canvas = document.getElementById('batalla-pasteles');
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo vintage francés
+            const gradiente = crearGradienteVintage(ctx, 400, 300, ['#8b4513', '#cd853f', '#daa520']);
+            ctx.fillStyle = gradiente;
+            ctx.fillRect(0, 0, 400, 300);
+            
+            // Panaderos (siluetas)
+            ctx.fillStyle = '#2c1810';
+            ctx.fillRect(100, 120, 30, 80);
+            ctx.fillRect(270, 120, 30, 80);
+            
+            // Sombreros de chef
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(95, 110, 40, 15);
+            ctx.fillRect(265, 110, 40, 15);
+            
+            // Pasteles volando
+            ctx.fillStyle = '#daa520';
+            for (let i = 0; i < 8; i++) {
+                const x = 50 + i * 40;
+                const y = 60 + Math.sin(i) * 20;
+                ctx.fillRect(x, y, 15, 10);
+            }
+            
+            // Nubes de harina
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(150, 80, 30, 0, Math.PI * 2);
+            ctx.arc(250, 90, 25, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Texto
+            ctx.fillStyle = '#8b4513';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🥖 BATALLA PASTELES', 200, 40);
+            ctx.font = '16px Arial';
+            ctx.fillText('Francia 1838', 200, 260);
+        }
+        
+        // Desfile Militar Corto
+        function dibujarDesfileCorto() {
+            const canvas = document.getElementById('desfile-corto');
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo británico vintage
+            const gradiente = crearGradienteVintage(ctx, 400, 300, ['#2c3e50', '#34495e', '#5d6d7e']);
+            ctx.fillStyle = gradiente;
+            ctx.fillRect(0, 0, 400, 300);
+            
+            // Soldados (solo 3 para mostrar que es corto)
+            ctx.fillStyle = '#8b0000';
+            for (let i = 0; i < 3; i++) {
+                const x = 120 + i * 60;
+                ctx.fillRect(x, 120, 25, 80);
+                
+                // Sombreros militares
+                ctx.fillStyle = '#000';
+                ctx.fillRect(x - 5, 110, 35, 15);
+                ctx.fillStyle = '#8b0000';
+            }
+            
+            // Banderas pequeñas
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(350, 100, 30, 20);
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(350, 100);
+            ctx.lineTo(350, 140);
+            ctx.stroke();
+            
+            // Líneas de marcha (pocas)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(50, 220 + i * 15);
+                ctx.lineTo(350, 220 + i * 15);
+                ctx.stroke();
+            }
+            
+            // Texto
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🎖️ DESFILE MÁS CORTO', 200, 40);
+            ctx.font = '16px Arial';
+            ctx.fillText('Reino Unido 1913', 200, 260);
+        }
+        
+        // Función para descargar imagen
+        function descargarImagen(canvasId, nombreArchivo) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = nombreArchivo;
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click();
+        }
+        
+        // Dibujar todas las imágenes al cargar
+        window.onload = function() {
+            dibujarReyMar();
+            dibujarBatallaPasteles();
+            dibujarDesfileCorto();
+        };
+    </script>
+</body>
+</html>

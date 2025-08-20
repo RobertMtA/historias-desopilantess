@@ -1,0 +1,310 @@
+/* Estilos base de la página de historias */
+.historias-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Filtro de búsqueda */
+.filtro-container {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.filtro-container input {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  padding-left: 3rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filtro-container input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.filtro-container::before {
+  content: "\1F50D"; /* Emoji de lupa */
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+/* Grid de historias */
+.historias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Tarjeta de historia individual */
+.historia-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid #e5e7eb;
+}
+
+.historia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+
+/* Encabezado de la tarjeta */
+.card-header {
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.card-pais {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.card-pais svg {
+  color: #3b82f6;
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+  padding: 0 1.5rem 1rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Contenedor de imágenes */
+.imagen-container {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  max-height: 200px;
+}
+
+.imagen-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.historia-card:hover .imagen-container img {
+  transform: scale(1.03);
+}
+
+/* Overlay para imágenes */
+.imagen-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+}
+
+/* Contenedor de video */
+.video-container {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.video-container video {
+  width: 100%;
+  display: block;
+}
+
+/* Acciones de la tarjeta */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid #f3f4f6;
+  background-color: #f9fafb;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.action-button.like.active {
+  color: #ef4444;
+}
+
+.action-button.save.active {
+  color: #3b82f6;
+}
+
+/* Badge de categoría */
+.card-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 10;
+}
+
+/* Mensaje cuando no hay resultados */
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  grid-column: 1 / -1;
+}
+
+.no-results h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.no-results p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.reset-filters {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reset-filters:hover {
+  background: #2563eb;
+}
+
+/* Efecto skeleton para carga */
+.skeleton-card .card-title,
+.skeleton-card .card-meta span,
+.skeleton-card .card-content p {
+  background: #e5e7eb;
+  color: transparent;
+  border-radius: 4px;
+}
+
+.skeleton-card .card-title {
+  height: 1.5rem;
+  width: 80%;
+}
+
+.skeleton-card .card-meta span {
+  display: inline-block;
+  height: 0.875rem;
+  width: 40%;
+}
+
+.skeleton-card .card-content p {
+  height: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-card .card-content p:last-child {
+  width: 60%;
+}
+
+.skeleton-card .imagen-container,
+.skeleton-card .video-container {
+  background: #e5e7eb;
+  min-height: 180px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .historias-page {
+    padding: 1rem;
+  }
+  
+  .historias-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .card-header {
+    padding: 1rem 1rem 0.25rem;
+  }
+  
+  .card-content {
+    padding: 0 1rem 0.75rem;
+  }
+  
+  .card-actions {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.historia-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Retrasos para la animación en cascada */
+.historia-card:nth-child(1) { animation-delay: 0.1s; }
+.historia-card:nth-child(2) { animation-delay: 0.2s; }
+.historia-card:nth-child(3) { animation-delay: 0.3s; }
+.historia-card:nth-child(4) { animation-delay: 0.4s; }
+.historia-card:nth-child(5) { animation-delay: 0.5s; }
+.historia-card:nth-child(6) { animation-delay: 0.6s; }

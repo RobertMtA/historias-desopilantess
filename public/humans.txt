@@ -1,0 +1,24 @@
+/* TEAM */
+
+Desarrollador: Equipo Historias Desopilantes
+Contacto: info@historias-desopilantes.com
+Twitter: @historiasdesopilantes
+Ubicación: Argentina
+
+/* THANKS */
+
+Gracias a todos los usuarios que comparten sus historias increíbles
+Comunidad React y Vite por las herramientas excepcionales
+Font Awesome por los iconos
+Google Fonts por la tipografía
+
+/* SITE */
+
+Última actualización: 2025/08/18
+Lenguaje: Español / Spanish
+Doctype: HTML5
+IDE: Visual Studio Code
+Frameworks: React 18, Vite 5
+Base de datos: MongoDB Atlas
+Hosting: Por definir
+Estándares: HTML5, CSS3, ES6+, Accesibilidad WCAG 2.1

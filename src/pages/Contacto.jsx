@@ -63,6 +63,26 @@ const Contacto = () => {
     }
   };
 
+  // Función para despertar el servidor (Railway lo suspende por inactividad)
+  const wakeUpServer = async () => {
+    try {
+      console.log('☕ Despertando servidor...');
+      const response = await fetch(buildApiUrl('/api/test'), {
+        method: 'GET',
+        signal: AbortSignal.timeout(10000) // 10 segundos timeout
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Servidor despierto:', data.message);
+        return true;
+      }
+    } catch (error) {
+      console.log('⚠️ No se pudo despertar el servidor:', error.message);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -74,9 +94,12 @@ const Contacto = () => {
     console.log('🚀 Iniciando envío de formulario de contacto...');
     console.log('📋 Datos del formulario:', formData);
     
+    // Intentar despertar el servidor primero
+    await wakeUpServer();
+    
     // Crear AbortController para timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 segundos timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // Aumentado a 30 segundos
     
     try {
       const apiUrl = buildApiUrl('/api/contact');
@@ -216,9 +239,10 @@ const Contacto = () => {
                 <div className="form-group-improved full-width">
                   <label>Tipo de consulta</label>
                   <div className="radio-group">
-                    <label className="radio-option">
+                    <label className="radio-option" htmlFor="tipo-historia">
                       <input
                         type="radio"
+                        id="tipo-historia"
                         name="tipoConsulta"
                         value="historia"
                         checked={formData.tipoConsulta === 'historia'}
@@ -227,9 +251,10 @@ const Contacto = () => {
                       <span className="radio-custom"></span>
                       <span>📖 Compartir historia</span>
                     </label>
-                    <label className="radio-option">
+                    <label className="radio-option" htmlFor="tipo-pregunta">
                       <input
                         type="radio"
+                        id="tipo-pregunta"
                         name="tipoConsulta"
                         value="pregunta"
                         checked={formData.tipoConsulta === 'pregunta'}
@@ -238,9 +263,10 @@ const Contacto = () => {
                       <span className="radio-custom"></span>
                       <span>❓ Pregunta</span>
                     </label>
-                    <label className="radio-option">
+                    <label className="radio-option" htmlFor="tipo-sugerencia">
                       <input
                         type="radio"
+                        id="tipo-sugerencia"
                         name="tipoConsulta"
                         value="sugerencia"
                         checked={formData.tipoConsulta === 'sugerencia'}
@@ -249,9 +275,10 @@ const Contacto = () => {
                       <span className="radio-custom"></span>
                       <span>💡 Sugerencia</span>
                     </label>
-                    <label className="radio-option">
+                    <label className="radio-option" htmlFor="tipo-general">
                       <input
                         type="radio"
+                        id="tipo-general"
                         name="tipoConsulta"
                         value="general"
                         checked={formData.tipoConsulta === 'general'}

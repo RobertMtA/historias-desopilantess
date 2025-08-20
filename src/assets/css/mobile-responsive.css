@@ -1,0 +1,149 @@
+/* ========== RESPONSIVIDAD MÓVIL AVANZADA ========== */
+
+/* Mejoras para touch devices */
+@media (pointer: coarse) {
+  /* Elementos táctiles más grandes */
+  button, 
+  .btn, 
+  .historia-card .like-button,
+  .historia-card .comment-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Links y botones más espaciados */
+  .nav-link {
+    padding: 1rem 0.75rem;
+  }
+  
+  /* Formularios más amigables para touch */
+  input, 
+  textarea, 
+  select {
+    min-height: 44px;
+    padding: 0.75rem;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+}
+
+/* Mejoras específicas para móviles pequeños */
+@media (max-width: 480px) {
+  /* Contenedores más estrechos */
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  /* Títulos más pequeños */
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.125rem; }
+  
+  /* Botones de ancho completo en móvil */
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Modales que ocupen toda la pantalla */
+  .modal-content {
+    margin: 0;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  /* Historia cards más compactas */
+  .historia-card {
+    margin: 0.25rem 0;
+  }
+  
+  .historia-card h3 {
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+  
+  .historia-card p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+/* Mejoras para tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .historia-card {
+    margin: 0.5rem;
+  }
+  
+  .historias-grid {
+    gap: 1.5rem;
+  }
+  
+  .hero-section {
+    padding: 5rem 2rem;
+  }
+  
+  .featured-video {
+    padding: 2.5rem 2rem;
+  }
+}
+
+/* Landscape orientation en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-section p {
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+  
+  .search-container {
+    max-width: 70%;
+  }
+}
+
+/* Mejoras de performance para móviles */
+@media (max-width: 768px) {
+  /* Reducir animaciones en móviles para mejor rendimiento */
+  *, 
+  *::before, 
+  *::after {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+  
+  /* Optimizar imágenes */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Mejor manejo del overflow */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* Dark mode para móviles */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+  .historia-card {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  .historia-card h3 {
+    color: #ffffff;
+  }
+  
+  .historia-card p {
+    color: #cccccc;
+  }
+}

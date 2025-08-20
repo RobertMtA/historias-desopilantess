@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { buildApiUrl } from '../../config/api';
 import { 
   FaArrowLeft, 
   FaSave, 
@@ -51,7 +52,7 @@ const HistoriaForm = () => {
   const loadHistoria = async () => {
     try {
       const token = localStorage.getItem('admin_token');
-      const response = await fetch(`http://localhost:3009/api/admin/historias/${id}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/historias/${id}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -150,7 +151,7 @@ const HistoriaForm = () => {
         formDataToSend.append('imagen', imagen);
       }
 
-      const url = isEdit ? `http://localhost:3009/api/admin/historias/${id}` : 'http://localhost:3009/api/admin/historias';
+      const url = isEdit ? buildApiUrl(`/api/admin/historias/${id}`) : buildApiUrl('/api/admin/historias');
       const method = isEdit ? 'PUT' : 'POST';
 
       const response = await fetch(url, {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { buildApiUrl } from '../config/api';
 import { FaArrowRight, FaRegClock, FaFire, FaRegLaughSquint, FaGlobeAmericas, FaSkull, FaGhost, FaMask, FaUserSlash, FaCrown, FaFistRaised, FaLandmark, FaLeaf, FaLightbulb, FaStar } from 'react-icons/fa';
 import { GiTreasureMap } from 'react-icons/gi';
 import HistoriaCard from '../components/HistoriaCard';
@@ -147,7 +148,7 @@ const Home = () => {
     setNewsletterStatus('');
     
     try {
-      const response = await fetch('http://localhost:3009/api/subscribers', {
+      const response = await fetch(buildApiUrl('/api/subscribers'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -248,6 +249,7 @@ const Home = () => {
           {historiasDestacadas.map(historia => (
             <HistoriaCard 
               key={historia.id}
+              id={historia.id}
               titulo={historia.titulo}
               contenido={historia.contenido}
               imagen={historia.imagen}
@@ -286,6 +288,7 @@ const Home = () => {
           {historiasRecientes.map(historia => (
             <HistoriaCard 
               key={historia.id}
+              id={historia.id}
               titulo={historia.titulo}
               contenido={historia.contenido}
               imagen={historia.imagen}

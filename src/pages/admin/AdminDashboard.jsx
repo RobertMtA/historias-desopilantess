@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../../config/api';
 import { 
   FaBook, 
   FaEye, 
@@ -61,7 +62,7 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       const token = localStorage.getItem('admin_token');
-      const response = await fetch('http://localhost:3009/api/admin/historias/stats/general', {
+      const response = await fetch(buildApiUrl('/api/admin/historias/stats/general'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -87,7 +88,7 @@ const AdminDashboard = () => {
         ...(filterCategoria && { categoria: filterCategoria })
       });
 
-      const response = await fetch(`http://localhost:3009/api/admin/historias?${queryParams}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/historias?${queryParams}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -116,7 +117,7 @@ const AdminDashboard = () => {
   const toggleDestacada = async (id, destacada) => {
     try {
       const token = localStorage.getItem('admin_token');
-      const response = await fetch(`http://localhost:3009/api/admin/historias/${id}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/historias/${id}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -141,7 +142,7 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem('admin_token');
-      const response = await fetch(`http://localhost:3009/api/admin/historias/${id}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/historias/${id}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

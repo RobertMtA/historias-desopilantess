@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { buildApiUrl } from '../config/api';
 import { 
   FaEye, 
   FaEyeSlash, 
@@ -37,8 +38,12 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
 
   // Cargar datos iniciales (likes y comentarios)
   useEffect(() => {
-    console.log('Loading data for story ID:', id);
-    fetchStoryData();
+    if (id) {
+      console.log('Loading data for story ID:', id);
+      fetchStoryData();
+    } else {
+      console.warn('HistoriaCard: No ID provided, skipping data fetch');
+    }
   }, [id]);
 
   const fetchStoryData = async () => {
@@ -51,7 +56,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       console.log('Fetching data for story', id);
       
       // Obtener likes
-      const likesResponse = await fetch(`http://localhost:3009/api/stories/${id}/likes`);
+      const likesResponse = await fetch(buildApiUrl(`/api/stories/${id}/likes`));
       if (likesResponse.ok) {
         const likesData = await likesResponse.json();
         console.log('Likes data received:', likesData);
@@ -60,7 +65,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       }
       
       // Obtener comentarios
-      const commentsResponse = await fetch(`http://localhost:3009/api/stories/${id}/comments`);
+      const commentsResponse = await fetch(buildApiUrl(`/api/stories/${id}/comments`));
       if (commentsResponse.ok) {
         const commentsData = await commentsResponse.json();
         console.log('Comments data received:', commentsData.length, 'comments');
@@ -73,7 +78,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
 
   const handleLike = async () => {
     try {
-      const response = await fetch(`http://localhost:3009/api/stories/${id}/like`, {
+      const response = await fetch(buildApiUrl(`/api/stories/${id}/like`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -154,7 +159,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
     }
 
     try {
-      const response = await fetch(`http://localhost:3009/api/stories/${id}/comments`, {
+      const response = await fetch(buildApiUrl(`/api/stories/${id}/comments`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -190,7 +195,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
     setShowComments(true);
     
     try {
-      const response = await fetch(`http://localhost:3009/api/stories/${id}/comments`);
+      const response = await fetch(buildApiUrl(`/api/stories/${id}/comments`));
       if (response.ok) {
         const data = await response.json();
         setComments(data);

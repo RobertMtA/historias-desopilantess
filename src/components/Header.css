@@ -64,19 +64,35 @@
 }
 
 .header-logo-default {
-  height: 3.5rem;
-  /* Removemos el filtro que hacía la imagen invisible */
+  height: 2.5rem; /* Más pequeño en móvil */
 }
 
 .header-logo-scrolled {
-  height: 2.5rem;
+  height: 2rem;
   filter: none;
 }
 
+/* Responsividad para el logo */
+@media (min-width: 768px) {
+  .header-logo-default {
+    height: 3.5rem; /* Tamaño original para desktop */
+  }
+  
+  .header-logo-scrolled {
+    height: 2.5rem;
+  }
+}
+
 .header-title {
-  font-size: 1.25rem;
+  font-size: 1rem; /* Más pequeño en móvil */
   font-weight: bold;
   transition: color 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .header-title {
+    font-size: 1.25rem; /* Tamaño original para desktop */
+  }
 }
 
 .header-title-default {

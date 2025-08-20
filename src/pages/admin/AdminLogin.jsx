@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../../config/api';
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaSignInAlt } from 'react-icons/fa';
 import './AdminLogin.css';
 
@@ -29,7 +30,7 @@ const AdminLogin = () => {
 
     try {
       console.log('🔄 Intentando conectar al backend...');
-      const response = await fetch('http://localhost:3009/api/admin/auth/login', {
+      const response = await fetch(buildApiUrl('/api/admin/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

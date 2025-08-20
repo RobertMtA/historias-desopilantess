@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { buildApiUrl } from '../config/api';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaUser, FaTag, FaComments, FaCheck, FaExclamationTriangle, FaClock, FaGlobe } from 'react-icons/fa';
 import historias from '../data/historias';
 import './Contacto.css';
@@ -72,7 +73,7 @@ const Contacto = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:3009/api/contact', {
+      const response = await fetch(buildApiUrl('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

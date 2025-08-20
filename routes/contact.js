@@ -34,15 +34,19 @@ router.get('/', async (req, res) => {
 // POST /api/contact - Crear nuevo mensaje de contacto
 router.post('/', async (req, res) => {
   try {
+    console.log('📨 Recibiendo mensaje de contacto:', req.body);
     const { nombre, email, asunto, mensaje, tipoConsulta } = req.body;
     
     // Validación básica
     if (!nombre || !email || !asunto || !mensaje) {
+      console.log('❌ Validación fallida - campos faltantes');
       return res.status(400).json({ 
         error: 'Todos los campos son obligatorios',
         fields: { nombre, email, asunto, mensaje }
       });
     }
+    
+    console.log('✅ Validación básica pasada, creando contacto...');
     
     // Crear nuevo mensaje de contacto
     const contact = new Contact({
@@ -53,28 +57,32 @@ router.post('/', async (req, res) => {
       tipoConsulta: tipoConsulta || 'general'
     });
     
-    await contact.save();
+    console.log('💾 Guardando en MongoDB...');
+    const savedContact = await contact.save();
+    console.log('✅ Contacto guardado exitosamente:', savedContact._id);
     
     res.status(201).json({
       message: 'Mensaje enviado exitosamente. Te responderemos pronto.',
       contact: {
-        id: contact._id,
-        nombre: contact.nombre,
-        email: contact.email,
-        asunto: contact.asunto,
-        tipoConsulta: contact.tipoConsulta,
-        createdAt: contact.createdAt
+        id: savedContact._id,
+        nombre: savedContact.nombre,
+        email: savedContact.email,
+        asunto: savedContact.asunto,
+        tipoConsulta: savedContact.tipoConsulta,
+        createdAt: savedContact.createdAt
       }
     });
     
   } catch (error) {
-    console.error('Error creando mensaje de contacto:', error);
+    console.error('❌ Error creando mensaje de contacto:', error);
     
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(err => err.message);
+      console.log('❌ Error de validación:', messages);
       return res.status(400).json({ error: messages.join(', ') });
     }
     
+    console.log('❌ Error interno del servidor:', error.message);
     res.status(500).json({ error: 'Error al enviar el mensaje' });
   }
 });

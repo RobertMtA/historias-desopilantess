@@ -35,15 +35,19 @@ router.get('/', async (req, res) => {
 // POST /api/contact - Crear nuevo mensaje de contacto
 router.post('/', async (req, res) => {
   try {
+    console.log('📨 Recibiendo mensaje de contacto:', req.body);
     const { nombre, email, asunto, mensaje, tipoConsulta } = req.body;
     
     // Validación básica
     if (!nombre || !email || !asunto || !mensaje) {
+      console.log('❌ Validación fallida - campos faltantes');
       return res.status(400).json({ 
         error: 'Todos los campos son obligatorios',
         fields: { nombre, email, asunto, mensaje }
       });
     }
+    
+    console.log('✅ Validación básica pasada, creando contacto...');
     
     // Crear nuevo mensaje de contacto
     const contact = new Contact({
@@ -54,7 +58,9 @@ router.post('/', async (req, res) => {
       tipoConsulta: tipoConsulta || 'general'
     });
     
+    console.log('💾 Guardando en MongoDB...');
     await contact.save();
+    console.log('✅ Contacto guardado exitosamente:', contact._id);
     
     // Enviar emails de notificación
     try {

@@ -67,15 +67,33 @@ const Contacto = () => {
   const wakeUpServer = async () => {
     try {
       console.log('☕ Despertando servidor...');
-      const response = await fetch(buildApiUrl('/api/test'), {
+      
+      // Primero probar la ruta general
+      const testResponse = await fetch(buildApiUrl('/api/test'), {
         method: 'GET',
         signal: AbortSignal.timeout(10000) // 10 segundos timeout
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        console.log('✅ Servidor despierto:', data.message);
-        return true;
+      if (testResponse.ok) {
+        const testData = await testResponse.json();
+        console.log('✅ Servidor despierto:', testData.message);
+        
+        // Ahora probar la ruta específica de contactos
+        console.log('🔍 Probando ruta de contactos...');
+        const contactTestResponse = await fetch(buildApiUrl('/api/contact/test'), {
+          method: 'GET',
+          signal: AbortSignal.timeout(10000)
+        });
+        
+        if (contactTestResponse.ok) {
+          const contactData = await contactTestResponse.json();
+          console.log('✅ Ruta de contactos OK:', contactData.message);
+          console.log('🔗 MongoDB estado:', contactData.mongoStatus);
+          return true;
+        } else {
+          console.log('⚠️ Problema con ruta de contactos:', contactTestResponse.status);
+          return false;
+        }
       }
     } catch (error) {
       console.log('⚠️ No se pudo despertar el servidor:', error.message);

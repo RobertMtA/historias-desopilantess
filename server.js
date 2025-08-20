@@ -32,6 +32,15 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Servidor backend funcionando correctamente', timestamp: new Date() });
 });
 
+// Ruta de prueba específica para contactos
+app.get('/api/contact/test', (req, res) => {
+  res.json({ 
+    message: '✅ Ruta de contacto funcionando correctamente', 
+    timestamp: new Date(),
+    mongoStatus: mongoose.connection.readyState === 1 ? 'conectado' : 'desconectado'
+  });
+});
+
 // Manejo de errores global
 app.use((error, req, res, next) => {
   console.error('Error:', error);

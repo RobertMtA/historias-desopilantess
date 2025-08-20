@@ -31,10 +31,11 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
   // Verificar que tenemos un ID válido - CRITICAL FIX
   const storyId = id || Math.floor(Math.random() * 45) + 1; // Fallback aleatorio entre 1-45
   
-  // Configurar límite de caracteres para mostrar "Leer más"
-  const CHAR_LIMIT = 200;
+  // Configurar límite de caracteres para mostrar "Leer más" - AUMENTADO PARA MEJOR UX
+  const CHAR_LIMIT = 400; // Aumentado de 200 a 400 para mostrar más contenido
   const shouldShowReadMore = contenido && contenido.length > CHAR_LIMIT;
   
+  // Mostrar contenido completo por defecto, solo cortar si es MUY largo
   const displayContent = shouldShowReadMore && !isExpanded 
     ? contenido.substring(0, CHAR_LIMIT) + '...' 
     : contenido;

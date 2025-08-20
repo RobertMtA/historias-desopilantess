@@ -88,13 +88,43 @@
   opacity: 0.3;
 }
 
-/* Contenido de texto */
+/* Contenido de texto - OPTIMIZADO PARA MOSTRAR MÁS CONTENIDO */
 .historia-card p {
   padding: 0 1.5rem 1.5rem;
   color: #4b5563;
   line-height: 1.7;
   font-size: 1rem;
   margin: 0;
+  max-height: none;
+  overflow: visible;
+  text-overflow: unset;
+  line-clamp: unset;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  display: block;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Contenedor de contenido sin restricciones */
+.contenido-container {
+  max-height: none;
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+
+.historia-content {
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  line-clamp: unset !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  display: block !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 /* Contenedor de video */
@@ -224,6 +254,15 @@
   .historia-card p {
     padding: 0 1rem 1rem;
     font-size: 0.95rem;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-clamp: unset !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
   }
   
   .video-container {
@@ -245,6 +284,18 @@
   
   .imagen-container {
     height: 160px;
+  }
+  
+  .historia-card p {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-clamp: unset !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
   }
   
   .historia-tags {

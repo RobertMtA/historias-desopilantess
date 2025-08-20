@@ -485,7 +485,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
               </div>
             )}
             
-            <p className="modal-content">{contenido}</p>
+            <p className="modal-text">{contenido}</p>
             
             {video && (
               <div className="modal-video-container">

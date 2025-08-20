@@ -342,6 +342,7 @@
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 100%;
 }
 
 .modal-image-container img {
@@ -349,9 +350,11 @@
   height: auto;
   display: block;
   filter: sepia(20%) contrast(1.1) brightness(0.9);
+  max-width: 100%;
+  object-fit: contain;
 }
 
-.modal-content {
+.modal-text {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #e5e5e5;
@@ -412,20 +415,23 @@
 /* Responsive para modal */
 @media (max-width: 768px) {
   .historia-modal {
-    padding: 10px;
+    padding: 5px;
     align-items: flex-start;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    display: flex !important;
   }
   
   .modal-content {
-    max-width: 100vw;
+    max-width: calc(100vw - 10px);
     max-height: none;
-    min-height: calc(100vh - 20px);
+    min-height: calc(100vh - 10px);
     margin: 0;
-    width: 100%;
+    width: calc(100vw - 10px);
     border-radius: 15px;
     overflow-y: visible;
+    display: block;
+    position: relative;
   }
   
   .modal-header {
@@ -435,24 +441,49 @@
     background: linear-gradient(135deg, #1a1a1a, #2d1b25);
     z-index: 10;
     border-radius: 15px 15px 0 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .modal-title {
     font-size: 1.6rem;
     line-height: 1.2;
     margin-right: 50px;
+    display: block;
+    color: #ff6b6b;
   }
   
   .modal-body {
     padding: 20px;
     overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
   }
   
-  .modal-body .modal-content {
+  .modal-body .modal-text {
     font-size: 1.1rem;
     line-height: 1.6;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    color: #e5e5e5;
+    margin-bottom: 20px;
+    display: block;
+  }
+  
+  .modal-image-container {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .modal-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
   }
   
   .modal-close-btn {
@@ -467,14 +498,16 @@
     backdrop-filter: blur(5px);
   }
   
-  .modal-image-container {
-    margin-bottom: 20px;
-    border-radius: 10px;
-  }
-  
   .modal-video-container {
     margin-top: 20px;
     border-radius: 10px;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .modal-video-container video {
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -502,7 +535,7 @@
     padding: 15px;
   }
   
-  .modal-body .modal-content {
+  .modal-body .modal-text {
     font-size: 1rem;
     line-height: 1.5;
   }

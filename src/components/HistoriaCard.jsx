@@ -31,15 +31,6 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
   // Verificar que tenemos un ID válido - CRITICAL FIX
   const storyId = id || Math.floor(Math.random() * 45) + 1; // Fallback aleatorio entre 1-45
   
-  // Debug crítico para entender el problema
-  console.log('HistoriaCard DEBUG:', { 
-    originalId: id, 
-    generatedStoryId: storyId, 
-    titulo: titulo?.substring(0, 30) + '...',
-    hasId: !!id,
-    idType: typeof id 
-  });
-  
   // Configurar límite de caracteres para mostrar "Leer más"
   const CHAR_LIMIT = 200;
   const shouldShowReadMore = contenido && contenido.length > CHAR_LIMIT;
@@ -491,6 +482,14 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                   src={imagen.startsWith('/') ? imagen : `/images/${imagen}`} 
                   alt={titulo}
                   loading="lazy"
+                  onLoad={() => console.log('✅ Imagen cargada:', imagen)}
+                  onError={(e) => console.error('❌ Error cargando imagen:', imagen, e)}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxWidth: '100%',
+                    objectFit: 'contain'
+                  }}
                 />
               </div>
             )}

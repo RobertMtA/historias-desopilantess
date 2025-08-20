@@ -28,6 +28,9 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
   const [visibleCommentsCount, setVisibleCommentsCount] = useState(3);
   const [commentError, setCommentError] = useState('');
   
+  // Verificar que tenemos un ID válido
+  const storyId = id || 1; // Fallback al ID 1 si no hay ID
+  
   // Configurar límite de caracteres para mostrar "Leer más"
   const CHAR_LIMIT = 200;
   const shouldShowReadMore = contenido && contenido.length > CHAR_LIMIT;
@@ -38,25 +41,21 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
 
   // Cargar datos iniciales (likes y comentarios)
   useEffect(() => {
-    if (id) {
-      console.log('Loading data for story ID:', id);
+    if (storyId) {
       fetchStoryData();
-    } else {
-      console.warn('HistoriaCard: No ID provided, skipping data fetch');
     }
-  }, [id]);
+  }, [storyId]);
 
   const fetchStoryData = async () => {
-    if (!id) {
-      console.error('No story ID provided');
+    if (!storyId) {
       return;
     }
     
     try {
-      console.log('Fetching data for story', id);
+      console.log('Fetching data for story', storyId);
       
       // Obtener likes
-      const likesResponse = await fetch(buildApiUrl(`/api/stories/${id}/likes`));
+      const likesResponse = await fetch(buildApiUrl(`/api/stories/${storyId}/likes`));
       if (likesResponse.ok) {
         const likesData = await likesResponse.json();
         console.log('Likes data received:', likesData);
@@ -65,7 +64,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       }
       
       // Obtener comentarios
-      const commentsResponse = await fetch(buildApiUrl(`/api/stories/${id}/comments`));
+      const commentsResponse = await fetch(buildApiUrl(`/api/stories/${storyId}/comments`));
       if (commentsResponse.ok) {
         const commentsData = await commentsResponse.json();
         console.log('Comments data received:', commentsData.length, 'comments');
@@ -78,7 +77,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
 
   const handleLike = async () => {
     try {
-      const response = await fetch(buildApiUrl(`/api/stories/${id}/like`), {
+      const response = await fetch(buildApiUrl(`/api/stories/${storyId}/like`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +158,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
     }
 
     try {
-      const response = await fetch(buildApiUrl(`/api/stories/${id}/comments`), {
+      const response = await fetch(buildApiUrl(`/api/stories/${storyId}/comments`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -195,7 +194,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
     setShowComments(true);
     
     try {
-      const response = await fetch(buildApiUrl(`/api/stories/${id}/comments`));
+      const response = await fetch(buildApiUrl(`/api/stories/${storyId}/comments`));
       if (response.ok) {
         const data = await response.json();
         setComments(data);

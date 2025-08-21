@@ -3,6 +3,26 @@ const router = express.Router();
 const Contact = require('../models/Contact');
 const { sendContactEmail, sendConfirmationEmail } = require('../config/emailConfig');
 
+// GET /api/contact/test - Test de la ruta de contacto
+router.get('/test', async (req, res) => {
+  try {
+    // Verificar conexión con MongoDB
+    const mongoStatus = await Contact.db.readyState === 1 ? 'conectado' : 'desconectado';
+    
+    res.json({
+      message: '✅ Ruta de contacto funcionando correctamente',
+      mongoStatus: mongoStatus,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error en test de contacto:', error);
+    res.status(500).json({ 
+      error: 'Error en test de contacto',
+      mongoStatus: 'error'
+    });
+  }
+});
+
 // GET /api/contact - Obtener todos los mensajes de contacto (para admin)
 router.get('/', async (req, res) => {
   try {
@@ -62,34 +82,7 @@ router.post('/', async (req, res) => {
     await contact.save();
     console.log('✅ Contacto guardado exitosamente:', contact._id);
     
-    // Enviar emails de notificación
-    try {
-      // Email al administrador
-      const adminEmailResult = await sendContactEmail({
-        nombre: contact.nombre,
-        email: contact.email,
-        asunto: contact.asunto,
-        mensaje: contact.mensaje,
-        tipoConsulta: contact.tipoConsulta
-      });
-      
-      // Email de confirmación al usuario
-      const confirmationEmailResult = await sendConfirmationEmail({
-        nombre: contact.nombre,
-        email: contact.email,
-        asunto: contact.asunto
-      });
-      
-      console.log('Resultados de email:', {
-        admin: adminEmailResult,
-        confirmation: confirmationEmailResult
-      });
-      
-    } catch (emailError) {
-      console.error('Error enviando emails:', emailError);
-      // No retornamos error para que el mensaje se guarde aunque falle el email
-    }
-    
+    // Responder inmediatamente al cliente
     res.status(201).json({
       message: 'Mensaje enviado exitosamente. Te responderemos pronto.',
       contact: {
@@ -99,6 +92,56 @@ router.post('/', async (req, res) => {
         asunto: contact.asunto,
         tipoConsulta: contact.tipoConsulta,
         createdAt: contact.createdAt
+      }
+    });
+    
+    // Enviar emails de notificación de forma asíncrona (sin esperar)
+    setImmediate(async () => {
+      try {
+        console.log('📧 Enviando emails de notificación...');
+        
+        // Verificar variables de entorno
+        const emailUser = process.env.GMAIL_EMAIL || 'robertogaona1985@gmail.com';
+        const emailPass = process.env.GMAIL_APP_PASSWORD || 'rvpg mkjr prpk okvz';
+        
+        console.log('📧 Email config:', { 
+          user: emailUser, 
+          hasPassword: !!emailPass,
+          passwordLength: emailPass?.length 
+        });
+        
+        // Email al administrador
+        const adminEmailResult = await sendContactEmail({
+          nombre: contact.nombre,
+          email: contact.email,
+          asunto: contact.asunto,
+          mensaje: contact.mensaje,
+          tipoConsulta: contact.tipoConsulta
+        });
+        
+        console.log('📧 Resultado admin email:', adminEmailResult);
+        
+        // Email de confirmación al usuario
+        const confirmationEmailResult = await sendConfirmationEmail({
+          nombre: contact.nombre,
+          email: contact.email,
+          asunto: contact.asunto
+        });
+        
+        console.log('📧 Resultado confirmation email:', confirmationEmailResult);
+        
+        console.log('✅ Emails enviados exitosamente:', {
+          admin: !!adminEmailResult,
+          confirmation: !!confirmationEmailResult
+        });
+        
+      } catch (emailError) {
+        console.error('❌ Error enviando emails (no afecta la respuesta):', {
+          message: emailError.message,
+          code: emailError.code,
+          command: emailError.command,
+          stack: emailError.stack
+        });
       }
     });
     

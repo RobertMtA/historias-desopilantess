@@ -1,23 +1,56 @@
 const nodemailer = require('nodemailer');
 
-// Configuración del transportador de Gmail
+// Configuración del transportador de Gmail con configuración Railway-friendly
 const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
+  // Configuración específica para Railway con variables de entorno dedicadas
+  const config = {
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true', // STARTTLS
     auth: {
       user: process.env.GMAIL_EMAIL || 'robertogaona1985@gmail.com',
       pass: process.env.GMAIL_APP_PASSWORD || 'rvpg mkjr prpk okvz'
+    },
+    connectionTimeout: 60000, // 60 segundos
+    greetingTimeout: 30000,   // 30 segundos
+    socketTimeout: 60000,     // 60 segundos
+    debug: process.env.NODE_ENV !== 'production',
+    logger: true,
+    tls: {
+      rejectUnauthorized: false
     }
+  };
+  
+  console.log('📧 Configuración SMTP:', {
+    host: config.host,
+    port: config.port,
+    secure: config.secure,
+    user: config.auth.user,
+    hasPassword: !!config.auth.pass
   });
+  
+  return nodemailer.createTransport(config);
 };
 
 // Función para enviar email de notificación
 const sendContactEmail = async (contactData) => {
-  const transporter = createTransporter();
-  
-  const { nombre, email, asunto, mensaje, tipoConsulta } = contactData;
-  
-  // Template del email
+  try {
+    const transporter = createTransporter();
+    
+    const { nombre, email, asunto, mensaje, tipoConsulta } = contactData;
+    
+    console.log('📧 Preparando email para admin...');
+    
+    // Verificar configuración
+    const emailUser = process.env.GMAIL_EMAIL || 'robertogaona1985@gmail.com';
+    const emailPass = process.env.GMAIL_APP_PASSWORD || 'rvpg mkjr prpk okvz';
+    
+    console.log('📧 Config verificada:', { 
+      user: emailUser, 
+      hasPassword: !!emailPass 
+    });
+    
+    // Template del email
   const htmlTemplate = `
     <!DOCTYPE html>
     <html lang="es">
@@ -115,19 +148,26 @@ const sendContactEmail = async (contactData) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email enviado exitosamente:', info.messageId);
+    console.log('✅ Email admin enviado exitosamente:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Error enviando email:', error);
-    return { success: false, error: error.message };
+    console.error('❌ Error enviando email admin:', error);
+    throw error; // Re-lanzar para que el catch exterior lo maneje
   }
+} catch (error) {
+  console.error('❌ Error general en sendContactEmail:', error);
+  return { success: false, error: error.message };
+}
 };
 
 // Función para enviar email de confirmación al usuario
 const sendConfirmationEmail = async (contactData) => {
-  const transporter = createTransporter();
-  
-  const { nombre, email, asunto } = contactData;
+  try {
+    const transporter = createTransporter();
+    
+    const { nombre, email, asunto } = contactData;
+    
+    console.log('📧 Preparando email de confirmación para:', email);
   
   const htmlTemplate = `
     <!DOCTYPE html>
@@ -186,12 +226,16 @@ const sendConfirmationEmail = async (contactData) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email de confirmación enviado:', info.messageId);
+    console.log('✅ Email de confirmación enviado:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Error enviando email de confirmación:', error);
-    return { success: false, error: error.message };
+    console.error('❌ Error enviando email de confirmación:', error);
+    throw error; // Re-lanzar para manejo exterior
   }
+} catch (error) {
+  console.error('❌ Error general en sendConfirmationEmail:', error);
+  return { success: false, error: error.message };
+}
 };
 
 module.exports = {

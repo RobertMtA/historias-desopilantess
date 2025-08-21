@@ -115,9 +115,9 @@ const Contacto = () => {
     // Intentar despertar el servidor primero
     await wakeUpServer();
     
-    // Crear AbortController para timeout
+    // Crear AbortController para timeout más generoso
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // Aumentado a 30 segundos
+    const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 segundos timeout
     
     try {
       const apiUrl = buildApiUrl('/api/contact');
@@ -148,14 +148,14 @@ const Contacto = () => {
         setErrors({});
         console.log('✅ Mensaje enviado exitosamente');
         
-        // Limpiar el mensaje después de 5 segundos
-        setTimeout(() => setSubmitStatus(null), 5000);
+        // Limpiar el mensaje después de 8 segundos para success
+        setTimeout(() => setSubmitStatus(null), 8000);
       } else {
         setSubmitStatus('error');
         console.error('❌ Error del servidor:', data.error);
         
-        // Limpiar el mensaje después de 5 segundos
-        setTimeout(() => setSubmitStatus(null), 5000);
+        // Limpiar el mensaje después de 8 segundos para error
+        setTimeout(() => setSubmitStatus(null), 8000);
       }
     } catch (error) {
       clearTimeout(timeoutId);
@@ -168,8 +168,8 @@ const Contacto = () => {
         setSubmitStatus('error');
       }
       
-      // Limpiar el mensaje después de 5 segundos
-      setTimeout(() => setSubmitStatus(null), 5000);
+      // Limpiar el mensaje después de 10 segundos para timeouts
+      setTimeout(() => setSubmitStatus(null), 10000);
     } finally {
       setIsSubmitting(false);
       console.log('🏁 Finalizando envío de formulario');
@@ -254,9 +254,9 @@ const Contacto = () => {
 
               <form onSubmit={handleSubmit} className="contact-form-improved">
                 {/* Selector de tipo de consulta */}
-                <div className="form-group-improved full-width">
-                  <label>Tipo de consulta</label>
-                  <div className="radio-group">
+                <fieldset className="form-group-improved full-width">
+                  <legend className="fieldset-legend">Tipo de consulta</legend>
+                  <div className="radio-group" role="radiogroup" aria-labelledby="tipo-consulta-legend">
                     <label className="radio-option" htmlFor="tipo-historia">
                       <input
                         type="radio"
@@ -265,9 +265,10 @@ const Contacto = () => {
                         value="historia"
                         checked={formData.tipoConsulta === 'historia'}
                         onChange={handleChange}
+                        aria-describedby="tipo-historia-desc"
                       />
                       <span className="radio-custom"></span>
-                      <span>📖 Compartir historia</span>
+                      <span id="tipo-historia-desc">📖 Compartir historia</span>
                     </label>
                     <label className="radio-option" htmlFor="tipo-pregunta">
                       <input
@@ -277,9 +278,10 @@ const Contacto = () => {
                         value="pregunta"
                         checked={formData.tipoConsulta === 'pregunta'}
                         onChange={handleChange}
+                        aria-describedby="tipo-pregunta-desc"
                       />
                       <span className="radio-custom"></span>
-                      <span>❓ Pregunta</span>
+                      <span id="tipo-pregunta-desc">❓ Pregunta</span>
                     </label>
                     <label className="radio-option" htmlFor="tipo-sugerencia">
                       <input
@@ -289,9 +291,10 @@ const Contacto = () => {
                         value="sugerencia"
                         checked={formData.tipoConsulta === 'sugerencia'}
                         onChange={handleChange}
+                        aria-describedby="tipo-sugerencia-desc"
                       />
                       <span className="radio-custom"></span>
-                      <span>💡 Sugerencia</span>
+                      <span id="tipo-sugerencia-desc">💡 Sugerencia</span>
                     </label>
                     <label className="radio-option" htmlFor="tipo-general">
                       <input
@@ -301,12 +304,13 @@ const Contacto = () => {
                         value="general"
                         checked={formData.tipoConsulta === 'general'}
                         onChange={handleChange}
+                        aria-describedby="tipo-general-desc"
                       />
                       <span className="radio-custom"></span>
-                      <span>💬 General</span>
+                      <span id="tipo-general-desc">💬 General</span>
                     </label>
                   </div>
-                </div>
+                </fieldset>
 
                 <div className="form-row">
                   <div className="form-group-improved">

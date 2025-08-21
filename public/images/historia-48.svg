@@ -1,0 +1,66 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo oscuro del bosque -->
+  <defs>
+    <linearGradient id="forestGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="moonGrad" cx="50%" cy="20%" r="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#cccccc;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Fondo -->
+  <rect width="400" height="300" fill="url(#forestGrad)"/>
+  
+  <!-- Luna -->
+  <circle cx="330" cy="60" r="25" fill="url(#moonGrad)"/>
+  
+  <!-- Árboles del fondo (siluetas) -->
+  <path d="M0,250 L0,120 Q10,100 20,120 L20,250 Z" fill="#0d0d0d"/>
+  <path d="M380,250 L380,140 Q390,120 400,140 L400,250 Z" fill="#0d0d0d"/>
+  <path d="M50,250 L50,100 Q60,80 70,100 L70,250 Z" fill="#111111"/>
+  <path d="M320,250 L320,110 Q330,90 340,110 L340,250 Z" fill="#111111"/>
+  
+  <!-- Árboles más cercanos -->
+  <ellipse cx="30" cy="180" rx="15" ry="70" fill="#1a1a1a"/>
+  <ellipse cx="370" cy="170" rx="12" ry="80" fill="#1a1a1a"/>
+  
+  <!-- Slenderman (figura central) -->
+  <!-- Cuerpo principal -->
+  <ellipse cx="200" cy="180" rx="8" ry="45" fill="#e8e8e8"/>
+  
+  <!-- Brazos largos y delgados -->
+  <path d="M192,150 Q150,160 120,140 Q110,145 115,155 Q145,175 195,165" fill="#e8e8e8"/>
+  <path d="M208,150 Q250,160 280,140 Q290,145 285,155 Q255,175 205,165" fill="#e8e8e8"/>
+  
+  <!-- Brazos adicionales (tentáculos) -->
+  <path d="M192,170 Q140,180 100,200 Q90,205 95,215 Q135,195 195,185" fill="#e8e8e8" opacity="0.8"/>
+  <path d="M208,170 Q260,180 300,200 Q310,205 305,215 Q265,195 205,185" fill="#e8e8e8" opacity="0.8"/>
+  
+  <!-- Piernas -->
+  <ellipse cx="195" cy="235" rx="4" ry="15" fill="#e8e8e8"/>
+  <ellipse cx="205" cy="235" rx="4" ry="15" fill="#e8e8e8"/>
+  
+  <!-- Cabeza (sin rostro) -->
+  <ellipse cx="200" cy="120" rx="12" ry="15" fill="#f0f0f0"/>
+  
+  <!-- Sombra proyectada -->
+  <ellipse cx="200" cy="260" rx="25" ry="8" fill="#000000" opacity="0.3"/>
+  
+  <!-- Efecto de niebla/misterio -->
+  <circle cx="150" cy="200" r="30" fill="#ffffff" opacity="0.05"/>
+  <circle cx="250" cy="180" r="35" fill="#ffffff" opacity="0.05"/>
+  
+  <!-- Pequeños detalles del bosque (ramas) -->
+  <path d="M80,120 L85,115 M85,125 L90,120 M75,130 L80,125" stroke="#333333" stroke-width="2" fill="none"/>
+  <path d="M320,130 L315,125 M315,135 L310,130 M325,140 L320,135" stroke="#333333" stroke-width="2" fill="none"/>
+  
+  <!-- Efecto de brillo siniestro en los "ojos" ausentes -->
+  <circle cx="196" cy="115" r="2" fill="#666666" opacity="0.3"/>
+  <circle cx="204" cy="115" r="2" fill="#666666" opacity="0.3"/>
+  
+  <!-- Texto oculto/atmosfera -->
+  <text x="200" y="290" font-family="serif" font-size="12" fill="#444444" text-anchor="middle" opacity="0.6">He is always watching...</text>
+</svg>

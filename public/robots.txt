@@ -1,21 +1,30 @@
-# Robots.txt para Historias Desopilantes
-# Permite a todos los robots indexar el sitio
+# Robots.txt optimizado para Historias Desopilantes
+# Permite indexación completa para mejor SEO
 
 User-agent: *
 Allow: /
+Allow: /historias
+Allow: /historia/*
+Allow: /categorias/*
+Allow: /contacto
+Allow: /buscar
 
-# Permitir específicamente a los principales bots de búsqueda
+# Permitir motores de búsqueda específicos con crawl-delay optimizado
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Slurp
 Allow: /
+Crawl-delay: 1
 
 User-agent: DuckDuckBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Baiduspider
 Allow: /

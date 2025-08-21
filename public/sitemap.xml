@@ -5,27 +5,27 @@
     
     <!-- Página principal -->
     <url>
-        <loc>https://historias-desopilantes.com/</loc>
-        <lastmod>2025-08-18</lastmod>
+        <loc>https://histostorias-desopilantes.web.app/</loc>
+        <lastmod>2025-08-21</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
         <image:image>
-            <image:loc>https://historias-desopilantes.com/og-image.jpg</image:loc>
-            <image:title>Historias Desopilantes - Página Principal</image:title>
-            <image:caption>Las mejores historias divertidas y anécdotas</image:caption>
+            <image:loc>https://histostorias-desopilantes.web.app/img/img-logo.jpg</image:loc>
+            <image:title>Historias Desopilantes - Las Mejores Anécdotas Divertidas</image:title>
+            <image:caption>🤣 Más de 50 historias desopilantes reales que te harán llorar de risa</image:caption>
         </image:image>
     </url>
     
     <!-- Página de historias -->
     <url>
-        <loc>https://historias-desopilantes.com/historias</loc>
-        <lastmod>2025-08-18</lastmod>
+        <loc>https://histostorias-desopilantes.web.app/historias</loc>
+        <lastmod>2025-08-21</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
         <image:image>
-            <image:loc>https://historias-desopilantes.com/historias-image.jpg</image:loc>
-            <image:title>Todas las Historias Divertidas</image:title>
-            <image:caption>Explora nuestra colección completa de historias</image:caption>
+            <image:loc>https://histostorias-desopilantes.web.app/images/historia-1.svg</image:loc>
+            <image:title>Todas las Historias Desopilantes</image:title>
+            <image:caption>Explora nuestra colección completa de anécdotas divertidas y relatos increíbles</image:caption>
         </image:image>
     </url>
     

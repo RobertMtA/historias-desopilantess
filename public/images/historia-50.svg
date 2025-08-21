@@ -1,0 +1,106 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo de laboratorio oscuro -->
+  <defs>
+    <linearGradient id="labGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2a2a2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="gasGrad" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" style="stop-color:#228b22;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#006400;stop-opacity:0.1" />
+    </radialGradient>
+    <linearGradient id="bloodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b0000;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#4b0000;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Fondo -->
+  <rect width="400" height="300" fill="url(#labGrad)"/>
+  
+  <!-- Cámara de experimento -->
+  <rect x="50" y="80" width="300" height="160" fill="#333333" stroke="#555555" stroke-width="2"/>
+  
+  <!-- Gas experimental (verde tóxico) -->
+  <rect x="52" y="82" width="296" height="156" fill="url(#gasGrad)"/>
+  
+  <!-- Ventana de observación -->
+  <rect x="60" y="90" width="80" height="60" fill="#1a1a1a" stroke="#666666" stroke-width="2"/>
+  <rect x="65" y="95" width="70" height="50" fill="#000000"/>
+  
+  <!-- Panel de control -->
+  <rect x="280" y="60" width="60" height="30" fill="#2a2a2a" stroke="#555555" stroke-width="1"/>
+  <circle cx="295" cy="70" r="3" fill="#ff0000" opacity="0.8"/>
+  <circle cx="310" cy="70" r="3" fill="#ffff00" opacity="0.8"/>
+  <circle cx="325" cy="70" r="3" fill="#00ff00" opacity="0.8"/>
+  
+  <!-- Tubería de gas -->
+  <rect x="340" y="75" width="15" height="20" fill="#666666"/>
+  <rect x="350" y="82" width="30" height="6" fill="#666666"/>
+  
+  <!-- Figuras siniestras de los prisioneros (siluetas distorsionadas) -->
+  <!-- Prisionero 1 - en posición anormal -->
+  <ellipse cx="100" cy="180" rx="8" ry="25" fill="#2a2a2a" opacity="0.8"/>
+  <circle cx="100" cy="160" r="8" fill="#2a2a2a" opacity="0.8"/>
+  
+  <!-- Prisionero 2 - arrastrándose -->
+  <ellipse cx="150" cy="200" rx="20" ry="8" fill="#2a2a2a" opacity="0.8"/>
+  <circle cx="170" cy="195" r="6" fill="#2a2a2a" opacity="0.8"/>
+  
+  <!-- Prisionero 3 - en esquina -->
+  <ellipse cx="300" cy="170" rx="6" ry="20" fill="#2a2a2a" opacity="0.8"/>
+  <circle cx="300" cy="155" r="6" fill="#2a2a2a" opacity="0.8"/>
+  
+  <!-- Marcas de arañazos en las paredes -->
+  <path d="M55,100 L58,110 M56,105 L59,115 M57,110 L60,120" stroke="#8b0000" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M340,120 L337,130 M339,125 L336,135 M338,130 L335,140" stroke="#8b0000" stroke-width="2" fill="none" opacity="0.6"/>
+  
+  <!-- Manchas de sangre -->
+  <circle cx="120" cy="210" r="4" fill="#8b0000" opacity="0.7"/>
+  <circle cx="180" cy="200" r="3" fill="#8b0000" opacity="0.7"/>
+  <circle cx="280" cy="220" r="2" fill="#8b0000" opacity="0.7"/>
+  <ellipse cx="200" cy="215" rx="8" ry="3" fill="#8b0000" opacity="0.5"/>
+  
+  <!-- Monitor de signos vitales -->
+  <rect x="20" y="40" width="60" height="30" fill="#1a1a1a" stroke="#555555" stroke-width="1"/>
+  <path d="M25,55 L30,50 L35,60 L40,45 L45,55 L50,50 L55,55 L60,50 L65,55 L70,50" stroke="#00ff00" stroke-width="2" fill="none"/>
+  
+  <!-- Científicos observando (siluetas) -->
+  <ellipse cx="30" cy="120" rx="6" ry="15" fill="#444444" opacity="0.6"/>
+  <circle cx="30" cy="105" r="5" fill="#444444" opacity="0.6"/>
+  
+  <!-- Notas de experimento -->
+  <rect x="10" y="180" width="25" height="30" fill="#f5f5f5" opacity="0.8"/>
+  <path d="M12,185 L32,185 M12,190 L30,190 M12,195 L28,195 M12,200 L31,200" stroke="#333333" stroke-width="1" fill="none"/>
+  
+  <!-- Tubos de ensayo con sustancias -->
+  <rect x="360" y="200" width="4" height="15" fill="#666666"/>
+  <rect x="368" y="200" width="4" height="15" fill="#666666"/>
+  <rect x="361" y="200" width="2" height="10" fill="#00ff00" opacity="0.7"/>
+  <rect x="369" y="200" width="2" height="8" fill="#ff0000" opacity="0.7"/>
+  
+  <!-- Efecto de bruma tóxica -->
+  <ellipse cx="200" cy="120" rx="80" ry="20" fill="#228b22" opacity="0.2"/>
+  <ellipse cx="180" cy="140" rx="60" ry="15" fill="#228b22" opacity="0.15"/>
+  
+  <!-- Ojos rojos mirando desde la oscuridad -->
+  <circle cx="95" cy="155" r="2" fill="#ff0000" opacity="0.8"/>
+  <circle cx="105" cy="155" r="2" fill="#ff0000" opacity="0.8"/>
+  <circle cx="295" cy="150" r="2" fill="#ff0000" opacity="0.8"/>
+  <circle cx="305" cy="150" r="2" fill="#ff0000" opacity="0.8"/>
+  
+  <!-- Texto de advertencia -->
+  <text x="200" y="280" font-family="serif" font-size="12" fill="#8b0000" text-anchor="middle" opacity="0.8">EXPERIMENT CLASSIFIED</text>
+  
+  <!-- Líneas de tensión/electricidad estática -->
+  <path d="M150,60 Q155,50 160,60 Q165,50 170,60" stroke="#ffff00" stroke-width="1" fill="none" opacity="0.4"/>
+  
+  <!-- Símbolo de peligro biológico -->
+  <g transform="translate(370,40) scale(0.4)">
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#ffff00" stroke-width="2"/>
+    <circle cx="0" cy="-8" r="3" fill="#ffff00"/>
+    <circle cx="7" cy="4" r="3" fill="#ffff00"/>
+    <circle cx="-7" cy="4" r="3" fill="#ffff00"/>
+  </g>
+</svg>

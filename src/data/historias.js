@@ -455,4 +455,4 @@ const historias = [
   }
 ]
 
-export default historias
+export default historias;

@@ -33,7 +33,36 @@ app.use('/api/stories', require('./routes/stories'));
 
 // Rutas de administración
 app.use('/api/admin/auth', authRouter);
-app.use('/api/admin/historias', require('./routes/historias'));
+
+// Middleware de autenticación para rutas de admin
+const adminAuth = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Token de acceso requerido' });
+    }
+
+    const jwt = require('jsonwebtoken');
+    const Admin = require('./models/Admin');
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'historias-desopilantes-secret-key');
+    const admin = await Admin.findById(decoded.id).select('-password');
+    
+    if (!admin || !admin.activo) {
+      return res.status(401).json({ error: 'Token inválido o usuario inactivo' });
+    }
+
+    req.admin = admin;
+    next();
+  } catch (error) {
+    console.error('Error de autenticación:', error);
+    res.status(401).json({ error: 'Token inválido' });
+  }
+};
+
+app.use('/api/admin/historias', adminAuth, require('./routes/historias'));
+app.use('/api/admin/comments', adminAuth, require('./routes/comments'));
 
 // Ruta de prueba
 app.get('/api/test', (req, res) => {

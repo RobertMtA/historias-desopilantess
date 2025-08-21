@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
+// Importar array de historias para referencia
+const historias = require('../src/data/historias');
+
 // Modelo de Historia (simplificado)
 const Historia = mongoose.model('Historia', {
   titulo: { type: String, required: true },
@@ -18,6 +21,19 @@ const Historia = mongoose.model('Historia', {
   activa: { type: Boolean, default: true },
   fechaCreacion: { type: Date, default: Date.now },
   fechaModificacion: { type: Date, default: Date.now }
+});
+
+// Modelo de Comentario (simplificado)
+const Comment = mongoose.model('Comment', {
+  userName: { type: String, required: true },
+  comment: { type: String, required: true },
+  storyId: { type: String, required: true },
+  storyTitle: String,
+  storyCategory: String,
+  ip: String,
+  userAgent: String,
+  createdAt: { type: Date, default: Date.now },
+  approved: { type: Boolean, default: true }
 });
 
 // Modelo de Admin (simplificado)
@@ -224,6 +240,180 @@ router.delete('/historias/:id', authenticateAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error eliminando historia:', error);
     res.status(500).json({ error: 'Error eliminando historia' });
+  }
+});
+
+// ========================
+// RUTAS DE COMENTARIOS
+// ========================
+
+// Obtener todos los comentarios (con paginación)
+router.get('/comments', authenticateAdmin, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    // Obtener comentarios con paginación
+    const comments = await Comment.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    // Contar total de comentarios
+    const totalComments = await Comment.countDocuments();
+    const totalPages = Math.ceil(totalComments / limit);
+
+    res.json({
+      comments: comments || [],
+      pagination: {
+        current: page,
+        pages: totalPages,
+        total: totalComments,
+        limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    });
+
+  } catch (error) {
+    console.error('Error obteniendo comentarios:', error);
+    res.status(500).json({ error: 'Error obteniendo comentarios' });
+  }
+});
+
+// Eliminar un comentario específico
+router.delete('/comments/:commentId', authenticateAdmin, async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const { storyId } = req.body;
+
+    console.log('🗑️ Eliminando comentario:', commentId, 'storyId:', storyId);
+
+    if (!storyId) {
+      return res.status(400).json({ error: 'storyId es requerido' });
+    }
+
+    // Buscar y eliminar el comentario
+    const deletedComment = await Comment.findByIdAndDelete(commentId);
+
+    if (!deletedComment) {
+      return res.status(404).json({ error: 'Comentario no encontrado' });
+    }
+
+    console.log('✅ Comentario eliminado exitosamente');
+
+    res.json({
+      message: 'Comentario eliminado exitosamente',
+      comment: deletedComment
+    });
+
+  } catch (error) {
+    console.error('Error eliminando comentario:', error);
+    res.status(500).json({ error: 'Error eliminando comentario' });
+  }
+});
+
+// Crear un comentario de prueba
+router.post('/comments', authenticateAdmin, async (req, res) => {
+  try {
+    const { userName, comment, storyId, storyTitle, storyCategory } = req.body;
+
+    if (!userName || !comment || !storyId) {
+      return res.status(400).json({ error: 'userName, comment y storyId son requeridos' });
+    }
+
+    const newComment = new Comment({
+      userName,
+      comment,
+      storyId,
+      storyTitle: storyTitle || 'Historia de prueba',
+      storyCategory: storyCategory || 'general',
+      ip: req.ip,
+      userAgent: req.get('User-Agent')
+    });
+
+    const savedComment = await newComment.save();
+
+    res.status(201).json({
+      message: 'Comentario creado exitosamente',
+      comment: savedComment
+    });
+
+  } catch (error) {
+    console.error('Error creando comentario:', error);
+    res.status(500).json({ error: 'Error creando comentario' });
+  }
+});
+
+// GET - Obtener comentarios de una historia específica
+router.get('/historias/:storyId/comments', authenticateAdmin, async (req, res) => {
+  try {
+    const { storyId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const comments = await Comment.find({ storyId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalComments = await Comment.countDocuments({ storyId });
+    const totalPages = Math.ceil(totalComments / limit);
+
+    // Obtener información de la historia
+    const storia = await Historia.findOne({ _id: storyId }) || 
+                   historias.find(h => h.id === storyId || h._id === storyId);
+
+    res.json({
+      comments: comments || [],
+      storyInfo: storia ? {
+        titulo: storia.titulo || storia.title,
+        categoria: storia.categoria || storia.category,
+        id: storia._id || storia.id
+      } : null,
+      pagination: {
+        current: page,
+        pages: totalPages,
+        total: totalComments,
+        limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    });
+
+  } catch (error) {
+    console.error('Error obteniendo comentarios de historia:', error);
+    res.status(500).json({ error: 'Error obteniendo comentarios de historia' });
+  }
+});
+
+// DELETE - Eliminar múltiples comentarios de una historia específica
+router.delete('/historias/:storyId/comments', authenticateAdmin, async (req, res) => {
+  try {
+    const { storyId } = req.params;
+    const { commentIds } = req.body;
+
+    if (!commentIds || !Array.isArray(commentIds)) {
+      return res.status(400).json({ error: 'Se requiere un array de commentIds' });
+    }
+
+    const result = await Comment.deleteMany({ 
+      _id: { $in: commentIds },
+      storyId: storyId
+    });
+
+    res.json({ 
+      success: true, 
+      deletedCount: result.deletedCount,
+      message: `${result.deletedCount} comentarios eliminados exitosamente`
+    });
+
+  } catch (error) {
+    console.error('Error eliminando comentarios:', error);
+    res.status(500).json({ error: 'Error eliminando comentarios' });
   }
 });
 

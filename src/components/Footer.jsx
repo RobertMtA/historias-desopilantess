@@ -231,7 +231,7 @@ const Footer = () => {
           <div className="footer-bottom-content">
             <div className="copyright-improved">
               <FaHeart className="heart-icon" />
-              <p>© 2025 Historias Desopilantes. Hecho con amor para hacerte sonreír.</p>
+              <p>© 2025 Historias Desopilantes. |Desarrollador Roberto Gaona.</p>
             </div>
             <div className="footer-meta">
               <div className="footer-stats">

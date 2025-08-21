@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Historia = require('../models/Historia');
+const StoryInteraction = require('../models/StoryInteraction');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
@@ -297,6 +298,227 @@ router.get('/stats/general', async (req, res) => {
     });
   } catch (error) {
     console.error('Error al obtener estadísticas:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ===== RUTAS DE ADMINISTRACIÓN DE COMENTARIOS =====
+
+// Obtener todos los comentarios con filtros de administración
+router.get('/comments', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+    const storyId = req.query.storyId;
+
+    let filter = {};
+    if (storyId) {
+      filter.storyId = parseInt(storyId);
+    }
+
+    const stories = await StoryInteraction.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({ updatedAt: -1 });
+
+    // Obtener información de las historias
+    const storyIds = stories.map(s => s.storyId);
+    const historiasInfo = await Historia.find({ id: { $in: storyIds } })
+      .select('id titulo categoria pais año');
+
+    // Crear un map para acceso rápido
+    const historiasMap = {};
+    historiasInfo.forEach(h => {
+      historiasMap[h.id] = h;
+    });
+
+    // Formatear respuesta con comentarios y datos de historia
+    const commentsWithStories = [];
+    stories.forEach(story => {
+      if (story.comments && story.comments.length > 0) {
+        story.comments.forEach(comment => {
+          commentsWithStories.push({
+            _id: comment._id,
+            storyId: story.storyId,
+            storyTitle: historiasMap[story.storyId]?.titulo || 'Historia no encontrada',
+            storyCategory: historiasMap[story.storyId]?.categoria || 'Sin categoría',
+            userName: comment.userName,
+            comment: comment.comment,
+            createdAt: comment.createdAt,
+            ip: comment.ip
+          });
+        });
+      }
+    });
+
+    // Ordenar por fecha de creación (más recientes primero)
+    commentsWithStories.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    const total = commentsWithStories.length;
+    const paginatedComments = commentsWithStories.slice(skip, skip + limit);
+
+    res.json({
+      comments: paginatedComments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Error obteniendo comentarios de admin:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Obtener comentarios específicos de una historia para admin
+router.get('/:storyId/comments', async (req, res) => {
+  try {
+    const { storyId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const story = await StoryInteraction.findOne({ storyId: parseInt(storyId) });
+    const historia = await Historia.findOne({ id: parseInt(storyId) });
+
+    if (!story) {
+      return res.json({
+        comments: [],
+        pagination: { page, limit, total: 0, pages: 0 },
+        storyInfo: historia ? {
+          id: historia.id,
+          titulo: historia.titulo,
+          categoria: historia.categoria
+        } : null
+      });
+    }
+
+    const comments = story.comments
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .map(comment => ({
+        _id: comment._id,
+        userName: comment.userName,
+        comment: comment.comment,
+        createdAt: comment.createdAt,
+        ip: comment.ip
+      }));
+
+    const total = comments.length;
+    const startIndex = (page - 1) * limit;
+    const paginatedComments = comments.slice(startIndex, startIndex + limit);
+
+    res.json({
+      comments: paginatedComments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      },
+      storyInfo: historia ? {
+        id: historia.id,
+        titulo: historia.titulo,
+        categoria: historia.categoria
+      } : null
+    });
+  } catch (error) {
+    console.error('Error obteniendo comentarios de historia:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Eliminar comentario específico
+router.delete('/comments/:commentId', async (req, res) => {
+  try {
+    const { commentId } = req.params;
+    const { storyId } = req.body;
+
+    if (!storyId) {
+      return res.status(400).json({ error: 'storyId es requerido' });
+    }
+
+    const story = await StoryInteraction.findOne({ storyId: parseInt(storyId) });
+    
+    if (!story) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+
+    // Encontrar y eliminar el comentario
+    const commentIndex = story.comments.findIndex(
+      comment => comment._id.toString() === commentId
+    );
+
+    if (commentIndex === -1) {
+      return res.status(404).json({ error: 'Comentario no encontrado' });
+    }
+
+    const deletedComment = story.comments[commentIndex];
+    story.comments.splice(commentIndex, 1);
+    
+    await story.save();
+
+    console.log(`✅ Comentario eliminado por admin:`, {
+      commentId,
+      storyId,
+      userName: deletedComment.userName,
+      comment: deletedComment.comment.substring(0, 50) + '...'
+    });
+
+    res.json({ 
+      message: 'Comentario eliminado exitosamente',
+      deletedComment: {
+        userName: deletedComment.userName,
+        comment: deletedComment.comment,
+        createdAt: deletedComment.createdAt
+      }
+    });
+  } catch (error) {
+    console.error('Error eliminando comentario:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Eliminar múltiples comentarios de una historia
+router.delete('/:storyId/comments', async (req, res) => {
+  try {
+    const { storyId } = req.params;
+    const { commentIds } = req.body;
+
+    if (!commentIds || !Array.isArray(commentIds)) {
+      return res.status(400).json({ error: 'commentIds debe ser un array' });
+    }
+
+    const story = await StoryInteraction.findOne({ storyId: parseInt(storyId) });
+    
+    if (!story) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+
+    // Eliminar comentarios especificados
+    const deletedComments = [];
+    story.comments = story.comments.filter(comment => {
+      if (commentIds.includes(comment._id.toString())) {
+        deletedComments.push({
+          userName: comment.userName,
+          comment: comment.comment.substring(0, 50) + '...'
+        });
+        return false;
+      }
+      return true;
+    });
+
+    await story.save();
+
+    console.log(`✅ ${deletedComments.length} comentarios eliminados por admin de historia ${storyId}`);
+
+    res.json({ 
+      message: `${deletedComments.length} comentarios eliminados exitosamente`,
+      deletedComments
+    });
+  } catch (error) {
+    console.error('Error eliminando comentarios múltiples:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

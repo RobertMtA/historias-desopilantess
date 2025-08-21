@@ -16,8 +16,12 @@ import {
   FaCog,
   FaSignOutAlt,
   FaImage,
-  FaVideo
+  FaVideo,
+  FaComments,
+  FaExternalLinkAlt,
+  FaGlobe
 } from 'react-icons/fa';
+import CommentsManager from './CommentsManager';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -29,6 +33,7 @@ const AdminDashboard = () => {
   const [filterCategoria, setFilterCategoria] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({});
+  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard' | 'comments'
   const navigate = useNavigate();
 
   const categorias = ['Realeza', 'Conflictos', 'Militar', 'Naturaleza', 'Política', 'Ciencia', 'Arte', 'Deportes', 'Religión', 'Economía', 'Tecnología', 'Cultura'];
@@ -200,8 +205,17 @@ const AdminDashboard = () => {
 
       {/* Navigation */}
       <nav className="admin-nav">
-        <button className="admin-nav-item active">
+        <button 
+          className={`admin-nav-item ${activeView === 'dashboard' ? 'active' : ''}`}
+          onClick={() => setActiveView('dashboard')}
+        >
           <FaChartBar /> Dashboard
+        </button>
+        <button 
+          className={`admin-nav-item ${activeView === 'comments' ? 'active' : ''}`}
+          onClick={() => setActiveView('comments')}
+        >
+          <FaComments /> Comentarios
         </button>
         <button className="admin-nav-item" onClick={() => navigate('/admin/historias/nueva')}>
           <FaPlus /> Nueva Historia
@@ -213,8 +227,10 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <main className="admin-main">
-        {/* Stats Cards */}
-        <div className="admin-stats-grid">
+        {activeView === 'dashboard' ? (
+          <>
+            {/* Stats Cards */}
+            <div className="admin-stats-grid">
           <div className="admin-stat-card">
             <div className="admin-stat-icon">
               <FaBook />
@@ -423,6 +439,10 @@ const AdminDashboard = () => {
             </div>
           )}
         </div>
+          </>
+        ) : activeView === 'comments' ? (
+          <CommentsManager />
+        ) : null}
       </main>
     </div>
   );

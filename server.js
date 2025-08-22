@@ -5,8 +5,22 @@ require('dotenv').config();
 
 const app = express();
 
+// Configuración de CORS específica
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://histostorias-desopilantes.web.app',
+    'https://histostorias-desopilantes.firebaseapp.com'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,6 +40,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/subscribers', require('./routes/subscribers'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/stories', require('./routes/stories'));
 
 // Ruta de prueba
 app.get('/api/test', (req, res) => {

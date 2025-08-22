@@ -42,6 +42,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .catch((error) => {
   console.error('❌ Error conectando a MongoDB:', error);
+  process.exit(1);
 });
 
 // Configuración CORS específica para tu dominio
@@ -64,6 +65,12 @@ app.use(cors(corsOptions));
 // Middleware para parsing JSON
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware de debugging para todas las peticiones
+app.use((req, res, next) => {
+  console.log(`🌐 ${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
 // Headers de seguridad básicos
 app.use((req, res, next) => {
@@ -572,15 +579,24 @@ app.post('/api/subscribers/unsubscribe', async (req, res) => {
 
 // Eliminar suscriptor permanentemente
 app.delete('/api/subscribers/:id', async (req, res) => {
+  console.log(`🗑️ DELETE request received for subscriber ${req.params.id}`);
   try {
     const { id } = req.params;
     
+    // Validar formato de ID de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.log(`❌ Invalid MongoDB ID format: ${id}`);
+      return res.status(400).json({ error: 'Formato de ID inválido' });
+    }
+    
     const subscriber = await Subscriber.findById(id);
     if (!subscriber) {
+      console.log(`❌ Subscriber ${id} not found`);
       return res.status(404).json({ error: 'Suscriptor no encontrado' });
     }
     
     await Subscriber.findByIdAndDelete(id);
+    console.log(`✅ Subscriber ${id} deleted successfully`);
     
     res.json({ 
       message: 'Suscriptor eliminado exitosamente',
@@ -638,6 +654,7 @@ app.put('/api/subscribers/:id/toggle', async (req, res) => {
 // Manejo de rutas no encontradas - Solo para /api/*
 app.use('/api/*', (req, res) => {
   console.log(`❌ 404 - API Route not found: ${req.method} ${req.originalUrl}`);
+  console.log(`    Available DELETE routes: /api/subscribers/:id`);
   res.status(404).json({
     status: 'error',
     message: `Endpoint no encontrado: ${req.method} ${req.originalUrl}`,
@@ -688,6 +705,15 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   DELETE /api/subscribers/:id`);
   console.log(`   PUT  /api/subscribers/:id/toggle`);
   console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores`);
+  
+  // Debug: Mostrar todas las rutas registradas
+  console.log('\n🔍 Rutas registradas en Express:');
+  app._router.stack.forEach((middleware, index) => {
+    if (middleware.route) {
+      const methods = Object.keys(middleware.route.methods).join(', ').toUpperCase();
+      console.log(`   ${methods} ${middleware.route.path}`);
+    }
+  });
 });
 
 module.exports = app;

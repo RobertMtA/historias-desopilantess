@@ -3,11 +3,14 @@ const API_CONFIG = {
   // URL base para desarrollo local
   development: 'http://localhost:3009',
   
-  // URL base para producción (Railway)
-  production: 'https://historias-desopilantes-production.up.railway.app',
+  // URL base para producción (Railway) - TEMPORALMENTE DESHABILITADO
+  production: null, // 'https://historias-desopilantes-production.up.railway.app',
   
   // Función para obtener la URL base correcta
   getBaseURL: () => {
+    // TEMPORALMENTE RETORNAMOS null para deshabilitar la API
+    return null;
+    
     // Si estamos en un dominio de Firebase, usar producción
     if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
       return API_CONFIG.production;

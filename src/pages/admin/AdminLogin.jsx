@@ -33,7 +33,7 @@ const AdminLogin = () => {
       
       // Autenticación temporal mientras se soluciona Railway
       const TEMP_ADMIN_EMAIL = 'admin@historias.com';
-      const TEMP_ADMIN_PASSWORD = 'Masajista40';
+      const TEMP_ADMIN_PASSWORD = 'Masajist@40';
       
       if (formData.email === TEMP_ADMIN_EMAIL && formData.password === TEMP_ADMIN_PASSWORD) {
         console.log('✅ Autenticación temporal exitosa');
@@ -85,7 +85,7 @@ const AdminLogin = () => {
         }
       } catch (backendError) {
         console.log('⚠️ Backend no disponible, usando autenticación temporal');
-        setError('Credenciales inválidas. Use: admin@historias.com / Masajista40');
+        setError('Credenciales inválidas. Use: admin@historias.com / Masajist@40');
       }
       
     } catch (error) {

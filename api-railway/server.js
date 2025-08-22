@@ -429,7 +429,7 @@ app.post('/api/admin/auth/login', async (req, res) => {
     
     // Credenciales hardcodeadas por seguridad (en producción usar variables de entorno)
     const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Masajista40';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Masajist@40';
     
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       // Login exitoso

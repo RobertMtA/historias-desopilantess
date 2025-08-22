@@ -6,22 +6,75 @@ require('dotenv').config();
 
 const app = express();
 
-// Configuración de CORS específica
+// Configuración de CORS más robusta
 const corsOptions = {
-  origin: [
+  origin: function (origin, callback) {
+    // Lista de orígenes permitidos
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://histostorias-desopilantes.web.app',
+      'https://histostorias-desopilantes.firebaseapp.com'
+    ];
+    
+    // Permitir requests sin origin (como apps móviles o Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log(`✅ CORS: Permitiendo origen ${origin}`);
+      callback(null, true);
+    } else {
+      console.log(`❌ CORS: Bloqueando origen ${origin}`);
+      callback(new Error('No permitido por CORS'), false);
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With', 
+    'Content-Type', 
+    'Accept',
+    'Authorization',
+    'Cache-Control',
+    'X-Access-Token'
+  ]
+};
+
+// Middleware global CORS
+app.use(cors(corsOptions));
+
+// Middleware adicional para headers CORS manuales
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
     'https://histostorias-desopilantes.web.app',
     'https://histostorias-desopilantes.firebaseapp.com'
-  ],
-  credentials: true,
-  optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-};
-
-// Middleware
-app.use(cors(corsOptions));
+  ];
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization,Cache-Control,X-Access-Token');
+  
+  // Log de requests para debugging
+  console.log(`📝 ${req.method} ${req.url} from ${origin || 'no-origin'}`);
+  
+  // Responder a preflight requests
+  if (req.method === 'OPTIONS') {
+    console.log('🔍 Preflight request received');
+    res.status(200).end();
+    return;
+  }
+  
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

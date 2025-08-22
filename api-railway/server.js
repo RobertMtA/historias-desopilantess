@@ -635,9 +635,9 @@ app.put('/api/subscribers/:id/toggle', async (req, res) => {
   }
 });
 
-// Manejo de rutas no encontradas
-app.use('*', (req, res) => {
-  console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
+// Manejo de rutas no encontradas - Solo para /api/*
+app.use('/api/*', (req, res) => {
+  console.log(`❌ 404 - API Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
     status: 'error',
     message: `Endpoint no encontrado: ${req.method} ${req.originalUrl}`,
@@ -687,6 +687,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   POST /api/subscribers/unsubscribe`);
   console.log(`   DELETE /api/subscribers/:id`);
   console.log(`   PUT  /api/subscribers/:id/toggle`);
+  console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores`);
 });
 
 module.exports = app;

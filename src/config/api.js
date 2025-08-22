@@ -8,7 +8,7 @@ const API_CONFIG = {
   
   // Función para obtener la URL base correcta
   getBaseURL: () => {
-    // Si estamos en un dominio de Firebase, usar producción
+    // Si estamos en un dominio de Firebase, usar Railway
     if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
       return API_CONFIG.production;
     }
@@ -20,6 +20,9 @@ const API_CONFIG = {
   
   // URLs completas de los endpoints
   endpoints: {
+    // Test endpoint
+    test: '/api/test',
+    
     // Stories
     stories: '/api/stories',
     storyLikes: (id) => `/api/stories/${id}/likes`,

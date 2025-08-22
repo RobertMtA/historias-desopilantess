@@ -8,14 +8,16 @@ const API_CONFIG = {
   
   // Función para obtener la URL base correcta
   getBaseURL: () => {
-    // Si estamos en un dominio de Firebase, usar Railway
-    if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
-      return API_CONFIG.production;
-    }
-    // De lo contrario, usar según NODE_ENV
-    return process.env.NODE_ENV === 'production' 
-      ? API_CONFIG.production 
-      : API_CONFIG.development;
+    // Siempre usar Railway por ahora ya que el servidor local tiene problemas
+    return API_CONFIG.production;
+    
+    // TODO: Restaurar lógica de desarrollo cuando se solucione servidor local
+    // if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
+    //   return API_CONFIG.production;
+    // }
+    // return process.env.NODE_ENV === 'production' 
+    //   ? API_CONFIG.production 
+    //   : API_CONFIG.development;
   },
   
   // URLs completas de los endpoints

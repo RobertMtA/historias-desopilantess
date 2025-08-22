@@ -19,9 +19,11 @@ import {
   FaVideo,
   FaComments,
   FaExternalLinkAlt,
-  FaGlobe
+  FaGlobe,
+  FaEnvelope
 } from 'react-icons/fa';
 import CommentsManager from './CommentsManager';
+import SubscribersManager from './SubscribersManager';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -33,7 +35,7 @@ const AdminDashboard = () => {
   const [filterCategoria, setFilterCategoria] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({});
-  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard' | 'comments'
+  const [activeView, setActiveView] = useState('dashboard'); // 'dashboard' | 'comments' | 'subscribers'
   const navigate = useNavigate();
 
   const categorias = ['Realeza', 'Conflictos', 'Militar', 'Naturaleza', 'Política', 'Ciencia', 'Arte', 'Deportes', 'Religión', 'Economía', 'Tecnología', 'Cultura'];
@@ -216,6 +218,12 @@ const AdminDashboard = () => {
           onClick={() => setActiveView('comments')}
         >
           <FaComments /> Comentarios
+        </button>
+        <button 
+          className={`admin-nav-item ${activeView === 'subscribers' ? 'active' : ''}`}
+          onClick={() => setActiveView('subscribers')}
+        >
+          <FaEnvelope /> Suscriptores
         </button>
         <button className="admin-nav-item" onClick={() => navigate('/admin/historias/nueva')}>
           <FaPlus /> Nueva Historia
@@ -442,6 +450,8 @@ const AdminDashboard = () => {
           </>
         ) : activeView === 'comments' ? (
           <CommentsManager />
+        ) : activeView === 'subscribers' ? (
+          <SubscribersManager />
         ) : null}
       </main>
     </div>

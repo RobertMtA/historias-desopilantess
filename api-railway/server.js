@@ -411,6 +411,82 @@ app.post('/api/stories/:id/comments', async (req, res) => {
 
 // ===== ENDPOINTS DE SUSCRIPTORES =====
 
+// ===== ENDPOINTS DE AUTENTICACIÓN ADMIN =====
+
+// Endpoint de login para admin
+app.post('/api/admin/auth/login', async (req, res) => {
+  console.log('🔐 Admin login attempt');
+  try {
+    const { username, password } = req.body;
+    
+    // Validación básica
+    if (!username || !password) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Usuario y contraseña son obligatorios'
+      });
+    }
+    
+    // Credenciales hardcodeadas por seguridad (en producción usar variables de entorno)
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Masajista40';
+    
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      // Login exitoso
+      const token = 'admin-token-' + Date.now(); // Token simple para demo
+      
+      console.log('✅ Admin login successful');
+      res.json({
+        status: 'success',
+        message: 'Login exitoso',
+        token: token,
+        user: {
+          username: ADMIN_USERNAME,
+          role: 'admin'
+        }
+      });
+    } else {
+      console.log('❌ Admin login failed - invalid credentials');
+      res.status(401).json({
+        status: 'error',
+        message: 'Credenciales inválidas'
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Error en login admin:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Error interno del servidor'
+    });
+  }
+});
+
+// Endpoint para verificar token de admin
+app.post('/api/admin/auth/verify', (req, res) => {
+  const { token } = req.body;
+  
+  // Verificación simple de token (en producción usar JWT)
+  if (token && token.startsWith('admin-token-')) {
+    res.json({
+      status: 'success',
+      valid: true,
+      user: {
+        username: 'admin',
+        role: 'admin'
+      }
+    });
+  } else {
+    res.status(401).json({
+      status: 'error',
+      valid: false,
+      message: 'Token inválido'
+    });
+  }
+});
+
+// ===== ENDPOINTS DE SUSCRIPTORES =====
+
 // Obtener todos los suscriptores (para admin)
 app.get('/api/subscribers', async (req, res) => {
   try {
@@ -661,6 +737,8 @@ app.use('/api/*', (req, res) => {
     availableEndpoints: [
       'GET /api/test',
       'POST /api/contact',
+      'POST /api/admin/auth/login',
+      'POST /api/admin/auth/verify',
       'GET /api/stories/:id/likes',
       'POST /api/stories/:id/likes',
       'POST /api/stories/:id/like',
@@ -693,6 +771,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📝 Available endpoints:`);
   console.log(`   GET  /api/test`);
   console.log(`   POST /api/contact`);
+  console.log(`   POST /api/admin/auth/login`);
+  console.log(`   POST /api/admin/auth/verify`);
   console.log(`   GET  /api/stories/:id/likes`);
   console.log(`   POST /api/stories/:id/likes`);
   console.log(`   POST /api/stories/:id/like`);
@@ -704,7 +784,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   POST /api/subscribers/unsubscribe`);
   console.log(`   DELETE /api/subscribers/:id`);
   console.log(`   PUT  /api/subscribers/:id/toggle`);
-  console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores - v2.1`);
+  console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores - v2.2`);
   
   // Debug: Mostrar todas las rutas registradas
   console.log('\n🔍 Rutas registradas en Express:');

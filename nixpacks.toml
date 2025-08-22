@@ -1,6 +1,6 @@
 [phases.setup]
 providers = ["node"]
-nodeVersion = "22.12.0"
+nodeVersion = "22.13.0"
 
 [phases.install]
 cmds = ["npm ci --legacy-peer-deps"]

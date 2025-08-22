@@ -87,7 +87,7 @@ app.get('/api/stories/:id/likes', (req, res) => {
   });
 });
 
-// Endpoint para dar like a una historia
+// Endpoint para dar like a una historia (POST /api/stories/:id/likes)
 app.post('/api/stories/:id/likes', (req, res) => {
   const { id } = req.params;
   console.log(`❤️ Like added to story ${id}`);
@@ -102,6 +102,48 @@ app.post('/api/stories/:id/likes', (req, res) => {
   });
 });
 
+// Endpoint para dar like a una historia (POST /api/stories/:id/like - singular)
+app.post('/api/stories/:id/like', (req, res) => {
+  const { id } = req.params;
+  console.log(`❤️ Like added to story ${id} (singular endpoint)`);
+  
+  // Simular agregar like
+  res.json({
+    status: 'success',
+    message: 'Like agregado exitosamente',
+    storyId: parseInt(id),
+    likes: Math.floor(Math.random() * 150) + 11,
+    hasLiked: true
+  });
+});
+
+// Endpoint para obtener comentarios de una historia
+app.get('/api/stories/:id/comments', (req, res) => {
+  const { id } = req.params;
+  console.log(`💬 Getting comments for story ${id}`);
+  
+  // Simular comentarios
+  res.json({
+    status: 'success',
+    storyId: parseInt(id),
+    comments: [
+      {
+        id: 1,
+        author: 'Usuario Anónimo',
+        text: '¡Increíble historia!',
+        date: new Date().toISOString()
+      },
+      {
+        id: 2,
+        author: 'Lector Curioso',
+        text: 'No sabía esta información, muy interesante.',
+        date: new Date().toISOString()
+      }
+    ],
+    total: 2
+  });
+});
+
 // Manejo de rutas no encontradas
 app.use('*', (req, res) => {
   console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
@@ -112,7 +154,9 @@ app.use('*', (req, res) => {
       'GET /api/test',
       'POST /api/contact',
       'GET /api/stories/:id/likes',
-      'POST /api/stories/:id/likes'
+      'POST /api/stories/:id/likes',
+      'POST /api/stories/:id/like',
+      'GET /api/stories/:id/comments'
     ]
   });
 });
@@ -136,6 +180,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   POST /api/contact`);
   console.log(`   GET  /api/stories/:id/likes`);
   console.log(`   POST /api/stories/:id/likes`);
+  console.log(`   POST /api/stories/:id/like`);
+  console.log(`   GET  /api/stories/:id/comments`);
 });
 
 module.exports = app;

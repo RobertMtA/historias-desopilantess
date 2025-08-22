@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -42,6 +43,9 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/stories', require('./routes/stories'));
 
+// Servir archivos estáticos de la aplicación React construida
+app.use(express.static(path.join(__dirname, 'dist')));
+
 // Ruta de prueba
 app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Servidor backend funcionando correctamente', timestamp: new Date() });
@@ -65,9 +69,14 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Ruta 404
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Ruta no encontrada' });
+// Ruta 404 para API
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Ruta de API no encontrada' });
+});
+
+// Todas las demás rutas sirven la aplicación React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3009;

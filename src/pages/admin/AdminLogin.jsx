@@ -30,28 +30,64 @@ const AdminLogin = () => {
 
     try {
       console.log('🔄 Intentando conectar al backend...');
-      const response = await fetch(buildApiUrl('/api/admin/auth/login'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
       
-      if (response.ok) {
-        console.log('✅ Backend respondió exitosamente');
+      // Autenticación temporal mientras se soluciona Railway
+      const TEMP_ADMIN_EMAIL = 'admin@historias.com';
+      const TEMP_ADMIN_PASSWORD = 'Masajista40';
+      
+      if (formData.email === TEMP_ADMIN_EMAIL && formData.password === TEMP_ADMIN_PASSWORD) {
+        console.log('✅ Autenticación temporal exitosa');
+        
+        // Simular respuesta del backend
+        const mockResponse = {
+          token: 'temp-admin-token-' + Date.now(),
+          admin: {
+            email: formData.email,
+            role: 'admin'
+          }
+        };
+        
         // Guardar token y datos del admin
-        localStorage.setItem('admin_token', data.token);
-        localStorage.setItem('admin_user', JSON.stringify(data.admin));
+        localStorage.setItem('admin_token', mockResponse.token);
+        localStorage.setItem('admin_user', JSON.stringify(mockResponse.admin));
         
         console.log('🎉 Redirigiendo al dashboard...');
-        // Redirigir al dashboard
         navigate('/admin/dashboard');
-      } else {
-        setError(data.error || 'Error al iniciar sesión');
+        return;
       }
+      
+      // Si no son las credenciales temporales, intentar con el backend
+      try {
+        const response = await fetch(buildApiUrl('/api/admin/auth/login'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: formData.email.split('@')[0], // Convertir email a username
+            password: formData.password
+          })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          console.log('✅ Backend respondió exitosamente');
+          // Guardar token y datos del admin
+          localStorage.setItem('admin_token', data.token);
+          localStorage.setItem('admin_user', JSON.stringify(data.user));
+          
+          console.log('🎉 Redirigiendo al dashboard...');
+          navigate('/admin/dashboard');
+        } else {
+          console.error('❌ Error del backend:', data.message);
+          setError('Credenciales inválidas');
+        }
+      } catch (backendError) {
+        console.log('⚠️ Backend no disponible, usando autenticación temporal');
+        setError('Credenciales inválidas. Use: admin@historias.com / Masajista40');
+      }
+      
     } catch (error) {
       console.error('💥 Error en login:', error);
       setError('Error de conexión. Por favor, intenta nuevamente.');

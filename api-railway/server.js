@@ -704,7 +704,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   POST /api/subscribers/unsubscribe`);
   console.log(`   DELETE /api/subscribers/:id`);
   console.log(`   PUT  /api/subscribers/:id/toggle`);
-  console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores`);
+  console.log(`✅ Servidor Railway actualizado con endpoints de suscriptores - v2.1`);
   
   // Debug: Mostrar todas las rutas registradas
   console.log('\n🔍 Rutas registradas en Express:');

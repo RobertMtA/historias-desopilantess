@@ -4,20 +4,15 @@ FROM node:22-alpine
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de configuración de paquetes
-COPY package*.json ./
+# Copiar solo los archivos del servidor API limpio
+COPY api-railway/package*.json ./api-railway/
+RUN cd api-railway && npm ci --only=production
 
-# Instalar dependencias con legacy peer deps
-RUN npm ci --legacy-peer-deps
-
-# Copiar el código fuente
-COPY . .
-
-# Construir la aplicación React
-RUN npm run build
+# Copiar el servidor
+COPY api-railway/server.js ./api-railway/
 
 # Exponer el puerto
-EXPOSE 8080
+EXPOSE 3009
 
-# Comando para ejecutar el servidor
-CMD ["node", "server-simple.js"]
+# Comando para ejecutar el servidor limpio
+CMD ["node", "api-railway/server.js"]

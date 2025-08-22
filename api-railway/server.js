@@ -427,11 +427,11 @@ app.post('/api/admin/auth/login', async (req, res) => {
       });
     }
     
-    // Credenciales hardcodeadas por seguridad (en producción usar variables de entorno)
-    const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Masajist@40';
+    // Credenciales definidas específicamente
+    const ADMIN_EMAIL = 'robertogaona1985@gmail.com';
+    const ADMIN_PASSWORD = 'Masajist@40';
     
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    if (username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       // Login exitoso
       const token = 'admin-token-' + Date.now(); // Token simple para demo
       
@@ -441,7 +441,7 @@ app.post('/api/admin/auth/login', async (req, res) => {
         message: 'Login exitoso',
         token: token,
         user: {
-          username: ADMIN_USERNAME,
+          email: ADMIN_EMAIL,
           role: 'admin'
         }
       });

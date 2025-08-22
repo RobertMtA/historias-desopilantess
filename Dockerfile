@@ -9,10 +9,7 @@ COPY api-railway/package*.json ./api-railway/
 RUN cd api-railway && npm ci --only=production
 
 # Copiar todos los archivos del servidor API
-COPY api-railway/server.js ./api-railway/
-COPY api-railway/Subscriber.js ./api-railway/
-COPY api-railway/StoryInteraction.js ./api-railway/
-COPY api-railway/.env ./api-railway/
+COPY api-railway/ ./api-railway/
 
 # Exponer el puerto
 EXPOSE 3009

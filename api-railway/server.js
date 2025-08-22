@@ -570,6 +570,71 @@ app.post('/api/subscribers/unsubscribe', async (req, res) => {
   }
 });
 
+// Eliminar suscriptor permanentemente
+app.delete('/api/subscribers/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const subscriber = await Subscriber.findById(id);
+    if (!subscriber) {
+      return res.status(404).json({ error: 'Suscriptor no encontrado' });
+    }
+    
+    await Subscriber.findByIdAndDelete(id);
+    
+    res.json({ 
+      message: 'Suscriptor eliminado exitosamente',
+      subscriber: {
+        id: subscriber._id,
+        email: subscriber.email
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error eliminando suscriptor:', error);
+    res.status(500).json({ error: 'Error al eliminar suscriptor' });
+  }
+});
+
+// Cambiar estado de suscriptor (activar/desactivar)
+app.put('/api/subscribers/:id/toggle', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const subscriber = await Subscriber.findById(id);
+    if (!subscriber) {
+      return res.status(404).json({ error: 'Suscriptor no encontrado' });
+    }
+    
+    // Cambiar el estado
+    subscriber.isActive = !subscriber.isActive;
+    
+    if (subscriber.isActive) {
+      // Si se está reactivando
+      subscriber.unsubscribedAt = null;
+      subscriber.subscribedAt = new Date();
+    } else {
+      // Si se está desactivando
+      subscriber.unsubscribedAt = new Date();
+    }
+    
+    await subscriber.save();
+    
+    res.json({ 
+      message: `Suscriptor ${subscriber.isActive ? 'reactivado' : 'desactivado'} exitosamente`,
+      subscriber: {
+        id: subscriber._id,
+        email: subscriber.email,
+        isActive: subscriber.isActive
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error cambiando estado de suscriptor:', error);
+    res.status(500).json({ error: 'Error al cambiar estado del suscriptor' });
+  }
+});
+
 // Manejo de rutas no encontradas
 app.use('*', (req, res) => {
   console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
@@ -587,7 +652,9 @@ app.use('*', (req, res) => {
       'GET /api/subscribers',
       'POST /api/subscribers',
       'GET /api/subscribers/stats',
-      'POST /api/subscribers/unsubscribe'
+      'POST /api/subscribers/unsubscribe',
+      'DELETE /api/subscribers/:id',
+      'PUT /api/subscribers/:id/toggle'
     ]
   });
 });
@@ -618,6 +685,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   POST /api/subscribers`);
   console.log(`   GET  /api/subscribers/stats`);
   console.log(`   POST /api/subscribers/unsubscribe`);
+  console.log(`   DELETE /api/subscribers/:id`);
+  console.log(`   PUT  /api/subscribers/:id/toggle`);
 });
 
 module.exports = app;

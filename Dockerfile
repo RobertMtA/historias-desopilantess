@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 8080
 
 # Comando para ejecutar el servidor
-CMD ["node", "server.js"]
+CMD ["node", "server-simple.js"]

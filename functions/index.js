@@ -1,5 +1,19 @@
 const {onRequest} = require("firebase-functions/v2/https");
 const {logger} = require("firebase-functions");
+const express = require("express");
+const cors = require("cors");
+const {Pool} = require("pg");
+
+// Configuración de PostgreSQL para Railway
+const pool = new Pool({
+  host: process.env.PGHOST || "localhost",
+  port: process.env.PGPORT || 5432,
+  user: process.env.PGUSER || "postgres", 
+  password: process.env.PGPASSWORD || "password",
+  database: process.env.PGDATABASE || "historias_db",
+  ssl: process.env.NODE_ENV === "production" ? 
+    {rejectUnauthorized: false} : false,
+});
 
 // Configuración CORS
 const corsOptions = {
@@ -8,11 +22,16 @@ const corsOptions = {
     "https://histostorias-desopilantes.firebaseapp.com",
     "http://localhost:5173",
     "http://localhost:4173",
+    "http://localhost:4000",
   ],
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
+
+const app = express();
+app.use(cors(corsOptions));
+app.use(express.json());
 
 // Función para el test de API
 exports.test = onRequest((request, response) => {

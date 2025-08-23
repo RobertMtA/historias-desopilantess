@@ -1,0 +1,312 @@
+/* Admin Login Styles */
+
+.admin-login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+
+.admin-login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+}
+
+.admin-login-container {
+  width: 100%;
+  max-width: 450px;
+}
+
+.admin-login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  animation: slideUp 0.8s ease-out;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-login-header {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: white;
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-login-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.05) 2px,
+    rgba(255, 255, 255, 0.05) 4px
+  );
+}
+
+.admin-security-badge {
+  background: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  display: inline-block;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3); }
+  50% { box-shadow: 0 4px 8px rgba(220, 38, 38, 0.6); }
+  100% { box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3); }
+}
+
+.admin-login-header h1 {
+  font-size: 1.6rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.admin-login-header h2 {
+  font-size: 1.2rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  opacity: 0.9;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.admin-warning-text {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #fbbf24;
+  margin-top: 1rem;
+}
+
+.admin-warning-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.admin-login-form {
+  padding: 2rem;
+}
+
+.admin-error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  border-left: 4px solid #dc2626;
+}
+
+.admin-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.label-icon {
+  color: #1a1a2e;
+  font-size: 0.9rem;
+}
+
+.admin-form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+}
+
+.admin-form-group input:focus {
+  outline: none;
+  border-color: #1a1a2e;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+}
+
+.admin-form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-password-wrapper {
+  position: relative;
+}
+
+.admin-password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+.admin-password-toggle:hover {
+  color: #1a1a2e;
+}
+
+.admin-password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.admin-login-button {
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.3);
+}
+
+.admin-login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(26, 26, 46, 0.4);
+  background: linear-gradient(135deg, #16213e, #0f3460);
+}
+
+.admin-login-button:active {
+  transform: translateY(0);
+}
+
+.admin-login-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.admin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.admin-login-footer {
+  background: #f8fafc;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+
+.admin-help-text {
+  background: rgba(249, 168, 37, 0.1);
+  border: 1px solid rgba(249, 168, 37, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-help-text p {
+  margin: 0;
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.admin-copyright {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .admin-login-page {
+    padding: 0.5rem;
+  }
+  
+  .admin-login-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  
+  .admin-login-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .admin-login-form {
+    padding: 1.5rem;
+  }
+  
+  .admin-login-footer {
+    padding: 1rem 1.5rem;
+  }
+}

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+    
+    <!-- Página principal -->
+    <url>
+        <loc>https://histostorias-desopilantes.web.app/</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://histostorias-desopilantes.web.app/img/img-logo.jpg</image:loc>
+            <image:title>Historias Desopilantes - Las Mejores Anécdotas Divertidas</image:title>
+            <image:caption>🤣 Más de 50 historias desopilantes reales que te harán llorar de risa</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Página de historias -->
+    <url>
+        <loc>https://histostorias-desopilantes.web.app/historias</loc>
+        <lastmod>2025-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://histostorias-desopilantes.web.app/images/historia-1.svg</image:loc>
+            <image:title>Todas las Historias Desopilantes</image:title>
+            <image:caption>Explora nuestra colección completa de anécdotas divertidas y relatos increíbles</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Página de categorías -->
+    <url>
+        <loc>https://historias-desopilantes.com/categorias</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <image:image>
+            <image:loc>https://historias-desopilantes.com/categorias-image.jpg</image:loc>
+            <image:title>Categorías de Historias</image:title>
+            <image:caption>Descubre historias por categorías</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Página de galería -->
+    <url>
+        <loc>https://historias-desopilantes.com/galeria</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+        <image:image>
+            <image:loc>https://historias-desopilantes.com/galeria-image.jpg</image:loc>
+            <image:title>Galería de Momentos</image:title>
+            <image:caption>Galería visual de nuestras mejores historias</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Página acerca de -->
+    <url>
+        <loc>https://historias-desopilantes.com/acerca-de</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://historias-desopilantes.com/team-image.jpg</image:loc>
+            <image:title>Acerca de Historias Desopilantes</image:title>
+            <image:caption>Conoce nuestro equipo y misión</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Página de contacto -->
+    <url>
+        <loc>https://historias-desopilantes.com/contacto</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+        <image:image>
+            <image:loc>https://historias-desopilantes.com/contact-image.jpg</image:loc>
+            <image:title>Contacto - Historias Desopilantes</image:title>
+            <image:caption>Ponte en contacto con nosotros</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Categorías específicas -->
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/divertidas</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/increibles</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/absurdas</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/emotivas</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/misteriosas</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://historias-desopilantes.com/categoria/inspiradoras</loc>
+        <lastmod>2025-08-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+</urlset>

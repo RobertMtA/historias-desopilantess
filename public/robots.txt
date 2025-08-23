@@ -1,0 +1,55 @@
+# Robots.txt optimizado para Historias Desopilantes
+# Permite indexación completa para mejor SEO
+
+User-agent: *
+Allow: /
+Allow: /historias
+Allow: /historia/*
+Allow: /categorias/*
+Allow: /contacto
+Allow: /buscar
+
+# Permitir motores de búsqueda específicos con crawl-delay optimizado
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Deshabilitar acceso a archivos de desarrollo y configuración
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /src/
+Disallow: /.env
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /vite.config.js
+Disallow: /eslint.config.js
+
+# Permitir archivos importantes para SEO
+Allow: /sitemap.xml
+Allow: /robots.txt
+Allow: /favicon.ico
+Allow: /site.webmanifest
+
+# Crawl-delay para ser respetuosos con los servidores
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://historias-desopilantes.com/sitemap.xml

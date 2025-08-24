@@ -1,0 +1,23 @@
+{
+  "name": "historias-desopilantes-api",
+  "version": "1.0.0",
+  "description": "Servidor API ultra-definitivo para Historias Desopilantes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node servidor-simple-ultra-definitivo.js",
+    "dev": "node servidor-simple-ultra-definitivo.js",
+    "build": "echo 'No es necesario compilar para el servidor simple' && exit 0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["historias", "api", "express"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.7",
+    "pg": "^8.11.3"
+  }
+}

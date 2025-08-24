@@ -76,13 +76,8 @@ export default defineConfig({
       }
     }
   },
-  preview: {
-    host: '0.0.0.0',
-    port: parseInt(process.env.PORT || '3000'),
-  },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
     // Generar un archivo 404.html que redirija a index.html
     rollupOptions: {
       output: {

@@ -360,6 +360,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                 onChange={(e) => setUserName(e.target.value)}
                 className="comment-name-input"
                 maxLength="50"
+                id={`comment-name-${storyId}`}
+                name="userName"
               />
               <div className="comment-input-wrapper">
                 <textarea
@@ -369,6 +371,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                   className="comment-textarea"
                   maxLength="500"
                   rows="3"
+                  id={`comment-text-${storyId}`}
+                  name="commentText"
                 />
                 <button 
                   type="submit" 

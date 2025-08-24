@@ -191,6 +191,58 @@
       }
     }
     </script>
+  
+  <!-- Script para interceptar y manejar errores 404 de API -->
+  <script>
+    // Código para interceptar fetch y evitar errores 404 en api/stories
+    (function() {
+      const originalFetch = window.fetch;
+      const VALID_STORY_IDS = Array.from({ length: 21 }, (_, i) => i + 1);
+      
+      window.fetch = function(url, options) {
+        if (url && typeof url === 'string' && url.includes('/api/stories/')) {
+          const urlParts = url.split('/');
+          const idIndex = urlParts.indexOf('stories') + 1;
+          
+          if (idIndex < urlParts.length) {
+            const storyId = parseInt(urlParts[idIndex]);
+            
+            if (!VALID_STORY_IDS.includes(storyId)) {
+              console.log(`📝 Interceptando petición para historia inexistente ID: ${storyId}`);
+              
+              if (url.includes('/likes')) {
+                console.log(`⚙️ Devolviendo likes=0 para historia ${storyId}`);
+                return Promise.resolve({
+                  ok: true,
+                  json: () => Promise.resolve({
+                    storyId: storyId,
+                    likes: 0,
+                    hasLiked: false,
+                    exists: false
+                  })
+                });
+              } 
+              else if (url.includes('/comments')) {
+                console.log(`⚙️ Devolviendo comments=[] para historia ${storyId}`);
+                return Promise.resolve({
+                  ok: true,
+                  json: () => Promise.resolve({
+                    storyId: storyId,
+                    comments: [],
+                    total: 0,
+                    exists: false
+                  })
+                });
+              }
+            }
+          }
+        }
+        
+        return originalFetch.apply(this, arguments);
+      };
+    })();
+  </script>
+
   </head>
   <body>
     <div id="root"></div>

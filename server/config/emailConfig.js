@@ -1,4 +1,22 @@
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
+
+// Leer logo desde archivo si existe, o usar un valor por defecto
+let logoBase64;
+try {
+  const logoPath = path.join(__dirname, '..', '..', 'logo-email-base64.txt');
+  if (fs.existsSync(logoPath)) {
+    logoBase64 = fs.readFileSync(logoPath, 'utf8');
+    console.log('✅ Logo cargado desde archivo');
+  } else {
+    console.log('⚠️ Archivo de logo no encontrado, usando logo por defecto');
+    logoBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyB3aWR0aD0nMTIwJyBoZWlnaHQ9JzEyMCc+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9J2JnR3JhZGllbnQnIHgxPScwJScgeTE9JzAlJyB4Mj0nMTAwJScgeTI9JzEwMCUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdHlsZT0nc3RvcC1jb2xvcjojMWU0MGFmO3N0b3Atb3BhY2l0eToxJyAvPgogICAgICA8c3RvcCBvZmZzZXQ9JzUwJScgc3R5bGU9J3N0b3AtY29sb3I6IzYzNjZmMTtzdG9wLW9wYWNpdHk6MScgLz4KICAgICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdHlsZT0nc3RvcC1jb2xvcjojZWM0ODk5O3N0b3Atb3BhY2l0eToxJyAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInIGZpbGw9J3VybCgjYmdHcmFkaWVudCknIHJ4PSc4MCcgcnk9JzgwJy8+CiAgPGcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjU2LCAyMDApJz4KICAgIDxwYXRoIGQ9J00tMTIwIC02MCBRLTEyMCAtODAsIC0xMDAgLTgwIEwxMDAgLTgwIFExMjAgLTgwLCAxMjAgLTYwIEwxMjAgNDAgUTEyMCA2MCwgMTAwIDYwIEwtMjAgNjAgTC02MCAxMDAgTC00MCA2MCBMLTEwMCA2MCBRLTEyMCA2MCwgLTEyMCA0MCBaJyBmaWxsPSd3aGl0ZScvPgogICAgPHRleHQgeD0nMCcgeT0nMTAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBcmlhbCBCbGFjaywgc2Fucy1zZXJpZicgZm9udC1zaXplPSc3MicgZm9udC13ZWlnaHQ9JzkwMCcgZmlsbD0nIzFlNDBhZic+SEQ8L3RleHQ+CiAgPC9nPgo8L3N2Zz4=';
+  }
+} catch (error) {
+  console.error('Error cargando logo:', error);
+  logoBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyB3aWR0aD0nMTIwJyBoZWlnaHQ9JzEyMCc+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9J2JnR3JhZGllbnQnIHgxPScwJScgeTE9JzAlJyB4Mj0nMTAwJScgeTI9JzEwMCUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdHlsZT0nc3RvcC1jb2xvcjojMWU0MGFmO3N0b3Atb3BhY2l0eToxJyAvPgogICAgICA8c3RvcCBvZmZzZXQ9JzUwJScgc3R5bGU9J3N0b3AtY29sb3I6IzYzNjZmMTtzdG9wLW9wYWNpdHk6MScgLz4KICAgICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdHlsZT0nc3RvcC1jb2xvcjojZWM0ODk5O3N0b3Atb3BhY2l0eToxJyAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInIGZpbGw9J3VybCgjYmdHcmFkaWVudCknIHJ4PSc4MCcgcnk9JzgwJy8+CiAgPGcgdHJhbnNmb3JtPSd0cmFuc2xhdGUoMjU2LCAyMDApJz4KICAgIDxwYXRoIGQ9J00tMTIwIC02MCBRLTEyMCAtODAsIC0xMDAgLTgwIEwxMDAgLTgwIFExMjAgLTgwLCAxMjAgLTYwIEwxMjAgNDAgUTEyMCA2MCwgMTAwIDYwIEwtMjAgNjAgTC02MCAxMDAgTC00MCA2MCBMLTEwMCA2MCBRLTEyMCA2MCwgLTEyMCA0MCBaJyBmaWxsPSd3aGl0ZScvPgogICAgPHRleHQgeD0nMCcgeT0nMTAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBcmlhbCBCbGFjaywgc2Fucy1zZXJpZicgZm9udC1zaXplPSc3MicgZm9udC13ZWlnaHQ9JzkwMCcgZmlsbD0nIzFlNDBhZic+SEQ8L3RleHQ+CiAgPC9nPgo8L3N2Zz4=';
+}
 
 // Configuración del transportador de Gmail con configuración Railway-friendly
 const createTransporter = () => {
@@ -78,6 +96,9 @@ const sendContactEmail = async (contactData) => {
     <body>
         <div class="container">
             <div class="header">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <img src="${logoBase64}" alt="Historias Desopilantes Logo" width="120" height="120" style="margin: 0 auto; display: block;">
+                </div>
                 <h1>📧 Nuevo Mensaje de Contacto</h1>
                 <p>Historias Desopilantes</p>
             </div>
@@ -132,6 +153,9 @@ const sendContactEmail = async (contactData) => {
             <div class="footer">
                 <p>Este mensaje fue enviado desde el formulario de contacto de <strong>Historias Desopilantes</strong></p>
                 <p>Para responder, simplemente responde a este email o contacta directamente a: ${email}</p>
+                <div style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px;">
+                    <p style="font-size: 12px; color: #666;">© ${new Date().getFullYear()} Historias Desopilantes - Todos los derechos reservados</p>
+                </div>
             </div>
         </div>
     </body>
@@ -189,6 +213,9 @@ const sendConfirmationEmail = async (contactData) => {
     <body>
         <div class="container">
             <div class="header">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <img src="${logoBase64}" alt="Historias Desopilantes Logo" width="120" height="120" style="margin: 0 auto; display: block;">
+                </div>
                 <h1>✅ ¡Mensaje Recibido!</h1>
                 <p>Historias Desopilantes</p>
             </div>
@@ -211,6 +238,9 @@ const sendConfirmationEmail = async (contactData) => {
             <div class="footer">
                 <p><strong>Historias Desopilantes</strong></p>
                 <p>Las historias más increíbles y divertidas del mundo</p>
+                <div style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px;">
+                    <p style="font-size: 12px; color: #666;">© ${new Date().getFullYear()} Historias Desopilantes - Todos los derechos reservados</p>
+                </div>
             </div>
         </div>
     </body>

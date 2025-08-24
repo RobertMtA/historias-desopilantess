@@ -229,34 +229,79 @@ app.post('/api/historias/:id/comentarios', async (req, res) => {
   }
 });
 
+// Importar configuración de email
+const { sendContactEmail, sendConfirmationEmail } = require('./config/emailConfig');
+
 // Endpoint para formulario de contacto
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', async (req, res) => {
   console.log('📧 Contact form submitted:', {
     name: req.body.name,
     email: req.body.email,
     hasMessage: !!req.body.message
   });
   
-  const { name, email, message } = req.body;
+  const { name: nombre, email, message: mensaje, subject: asunto, type: tipoConsulta = 'general' } = req.body;
   
   // Validación básica
-  if (!name || !email || !message) {
+  if (!nombre || !email || !mensaje) {
     return res.status(400).json({
       status: 'error',
       message: 'Faltan campos obligatorios'
     });
   }
-  
-  // Simular procesamiento exitoso
-  res.json({
-    status: 'success',
-    message: 'Mensaje enviado correctamente',
-    data: { 
-      name, 
-      email,
-      received: new Date().toISOString()
-    }
-  });
+
+  try {
+    // Guardar el mensaje en la base de datos (si es necesario)
+    // ...
+
+    // Enviar emails de notificación de forma asíncrona (sin esperar)
+    setImmediate(async () => {
+      try {
+        console.log('📧 Enviando emails de notificación...');
+        
+        // Email al administrador
+        const adminEmailResult = await sendContactEmail({
+          nombre,
+          email,
+          asunto: asunto || 'Sin asunto',
+          mensaje,
+          tipoConsulta: tipoConsulta || 'general'
+        });
+        
+        console.log('📧 Resultado admin email:', adminEmailResult);
+        
+        // Email de confirmación al usuario
+        const confirmationEmailResult = await sendConfirmationEmail({
+          nombre,
+          email,
+          asunto: asunto || 'Sin asunto'
+        });
+        
+        console.log('📧 Resultado confirmation email:', confirmationEmailResult);
+        
+      } catch (emailError) {
+        console.error('❌ Error enviando emails (no afecta la respuesta):', emailError);
+      }
+    });
+
+    // Responder al cliente inmediatamente
+    res.json({
+      status: 'success',
+      message: 'Mensaje enviado correctamente',
+      data: { 
+        nombre, 
+        email,
+        received: new Date().toISOString()
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error procesando contacto:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Error al procesar tu mensaje'
+    });
+  }
 });
 
 // Endpoint para obtener likes de una historia

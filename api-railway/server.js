@@ -23,13 +23,19 @@ const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 const isRailway = process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID;
 
+// En Railway, ignorar variables manuales que apunten a localhost
+const shouldIgnoreManualVars = isRailway && process.env.PGHOST === 'localhost';
+
 // Configuración mejorada para Railway
 const pool = new Pool({
-  // Priorizar DATABASE_URL si existe
-  ...(process.env.DATABASE_URL ? {
+  // Si estamos en Railway y tenemos variables que apuntan a localhost, usar solo DATABASE_URL automática
+  ...(process.env.DATABASE_URL && !shouldIgnoreManualVars ? {
     connectionString: process.env.DATABASE_URL,
-  } : process.env.PGHOST ? {
-    // Si tenemos variables individuales, usarlas
+  } : shouldIgnoreManualVars ? {
+    // Forzar uso de variables automáticas de Railway para PostgreSQL
+    connectionString: process.env.DATABASE_PRIVATE_URL || process.env.DATABASE_URL
+  } : process.env.PGHOST && !shouldIgnoreManualVars ? {
+    // Variables individuales solo si no apuntan a localhost
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     host: process.env.PGHOST,
@@ -51,9 +57,11 @@ console.log('🔧 Configuración de base de datos:');
 console.log('   NODE_ENV:', process.env.NODE_ENV);
 console.log('   RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
 console.log('   DATABASE_URL disponible:', !!process.env.DATABASE_URL);
+console.log('   DATABASE_PRIVATE_URL disponible:', !!process.env.DATABASE_PRIVATE_URL);
 console.log('   PGHOST:', process.env.PGHOST);
 console.log('   PGUSER:', process.env.PGUSER);
 console.log('   PGDATABASE:', process.env.PGDATABASE);
+console.log('   shouldIgnoreManualVars:', shouldIgnoreManualVars);
 console.log('   SSL habilitado:', (isProduction || isRailway));
 console.log('=================================================');
 

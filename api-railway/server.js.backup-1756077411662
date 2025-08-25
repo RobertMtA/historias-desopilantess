@@ -1,42 +1,73 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
-const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3009;
 
-// Configuración de PostgreSQL con manejo robusto de errores
-const { createRobustPostgresConnection } = require('./lib/robust-postgres');
+// Configuración de PostgreSQL
+const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
+let pool;
 
-// Cargar logo desde archivo (si existe)
-let logoBase64 = '';
 try {
-  const logoPath = path.join(__dirname, 'logo.txt');
-  if (fs.existsSync(logoPath)) {
-    logoBase64 = fs.readFileSync(logoPath, 'utf8');
-    console.log('✅ Logo cargado desde archivo');
-  }
+  console.log('📊 Configurando conexión PostgreSQL con URL:', process.env.DATABASE_URL ? 'URL configurada' : 'URL no disponible');
+  
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: isRailway ? { rejectUnauthorized: false } : false,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+  });
+
+  // Test de conexión a la base de datos
+  pool.connect((err, client, release) => {
+    if (err) {
+      console.error('❌ Error connecting to PostgreSQL:', err.message);
+      console.log('🔄 La API continuará funcionando sin base de datos');
+    } else {
+      console.log('✅ Connected to PostgreSQL database');
+      
+      // Crear tablas necesarias si no existen
+      client.query(`
+        CREATE TABLE IF NOT EXISTS story_interactions (
+          id SERIAL PRIMARY KEY,
+          historia_id INTEGER NOT NULL,
+          likes INTEGER DEFAULT 0,
+          views INTEGER DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          CONSTRAINT unique_historia_interaction UNIQUE (historia_id)
+        );
+        
+        CREATE TABLE IF NOT EXISTS comentarios (
+          id SERIAL PRIMARY KEY,
+          historia_id INTEGER NOT NULL,
+          autor VARCHAR(100) NOT NULL,
+          contenido TEXT NOT NULL,
+          fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `, (err) => {
+        if (err) {
+          console.error('❌ Error al crear tablas:', err.message);
+        } else {
+          console.log('✅ Tablas creadas o verificadas correctamente');
+        }
+        release();
+      });
+    }
+  });
 } catch (error) {
-  console.warn('⚠️ No se pudo cargar el logo:', error.message);
+  console.error('❌ Error al configurar pool de PostgreSQL:', error.message);
+  console.log('🔄 La API continuará funcionando sin base de datos');
+  
+  // Crear un pool simulado para evitar errores en el resto del código
+  pool = {
+    query: () => Promise.resolve({ rows: [], rowCount: 0 }),
+    on: () => {},
+    end: () => Promise.resolve()
+  };
 }
-
-// Crear conexión robusta a PostgreSQL
-const dbConnection = createRobustPostgresConnection({
-  // La URL de conexión se toma automáticamente de process.env.DATABASE_URL
-  maxRetries: 5,
-  retryDelay: 5000,
-  logPrefix: '📊 [PostgreSQL]',
-  // Datos iniciales para modo simulado
-  mockData: {
-    likes: {},
-    comments: []
-  }
-});
-
-// Obtener el pool para usar en el resto del código
-const pool = dbConnection.pool;
 
 // Dominios permitidos
 const allowedOrigins = [
@@ -101,23 +132,6 @@ app.use((req, res, next) => {
           storyId: parseInt(idMatch[1]),
           intercepted: true
         });
-      }
-    }
-  }
-  next();
-});
-
-// Middleware para manejar URLs antiguas
-app.use((req, res, next) => {
-  // Si la solicitud viene de la URL antigua, registrarla y continuar
-  const referer = req.headers.referer || '';
-  if (referer.includes('historias-desopilantes-production.up.railway.app')) {
-    console.log('⚠️ Detectada solicitud desde URL antigua:', referer);
-    console.log('📝 Ruta solicitada:', req.originalUrl);
-    console.log('💡 Recomendación: Actualizar la URL base en el frontend');
-  }
-  next();
-});
 
 // Root endpoint
 app.get('/', (req, res) => {

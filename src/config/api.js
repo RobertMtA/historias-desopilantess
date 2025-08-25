@@ -60,7 +60,7 @@ const API_CONFIG = {
   development: 'http://localhost:4000',
   
   // URL base para producción (Railway)
-  production: 'https://historias-desopilantes-production.up.railway.app',
+  production: 'https://historias-desopilantes-react-production.up.railway.app',
   
   // Función para obtener la URL base correcta
   getBaseURL: () => {

@@ -181,6 +181,8 @@ const Galeria = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
+            id="search-stories"
+            name="search-stories"
             placeholder="Buscar historias..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -234,6 +236,8 @@ const Galeria = () => {
             <div className="range-slider">
               <input
                 type="range"
+                id="year-range-min"
+                name="year-range-min"
                 min="1500"
                 max="2023"
                 value={yearRange[0]}
@@ -241,6 +245,8 @@ const Galeria = () => {
               />
               <input
                 type="range"
+                id="year-range-max"
+                name="year-range-max"
                 min="1500"
                 max="2023"
                 value={yearRange[1]}

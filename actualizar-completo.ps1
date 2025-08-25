@@ -188,9 +188,90 @@ try {
 }
 
 # 7. LIMPIAR CACHÉ DEL NAVEGADOR (INSTRUCCIONES)
-Write-Host "`n7. Instrucciones para limpiar la caché del navegador:" -ForegroundColor Yellow
-Write-Host "   1. Abre el archivo 'limpiar-cache.html' en tu navegador" -ForegroundColor White
-Write-Host "   2. Sigue las instrucciones para limpiar la caché o usar modo incógnito" -ForegroundColor White
+Write-Host "`n7. Implementando solución para errores 404 en comentarios..." -ForegroundColor Yellow
+
+# Verificar si existe el script de parche
+if (Test-Path -Path "$workspaceDir\aplicar-parche-404-comments.js") {
+    Write-Host "   Ejecutando script de parche para redirigir peticiones API..." -ForegroundColor White
+    
+    # Ejecutar el script de aplicación del parche
+    node "$workspaceDir\aplicar-parche-404-comments.js"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "   ⚠️ Advertencia: El script de parche devolvió un código de error: $LASTEXITCODE" -ForegroundColor Yellow
+    } else {
+        Write-Host "   ✓ Script de parche ejecutado exitosamente" -ForegroundColor Green
+    }
+} else {
+    Write-Host "   ⚠️ No se encontró el script de parche" -ForegroundColor Yellow
+    
+    # Preguntar si desea crear el archivo de parche
+    Write-Host "`n   ¿Deseas crear el script de parche para solucionar errores 404? (S/N)" -ForegroundColor Yellow
+    $parcheSolucion = Read-Host
+    if ($parcheSolucion -eq "S" -or $parcheSolucion -eq "s") {
+        # Código para crear el script de parche y el HTML de solución
+        $patchContent = @"
+/**
+ * PARCHE AUTOMÁTICO PARA REDIRIGIR PETICIONES A LA API
+ * No eliminar hasta que se resuelva el problema de URLs
+ */
+(function() {
+  const oldUrl = 'historias-desopilantes-production.up.railway.app';
+  const newUrl = 'historias-desopilantes-react-production.up.railway.app';
+  
+  console.log('🔄 Instalando redirección automática para peticiones API...');
+  
+  // Guardar la función fetch original
+  const originalFetch = window.fetch;
+  
+  // Reemplazar con nuestra función que redirige URLs
+  window.fetch = function(resource, options) {
+    if (typeof resource === 'string' && resource.includes(oldUrl)) {
+      console.log('🔀 Redirigiendo:', resource);
+      resource = resource.replace(oldUrl, newUrl);
+    }
+    return originalFetch.call(this, resource, options);
+  };
+  
+  // También parchear XMLHttpRequest para redirigir
+  const originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url, ...args) {
+    if (typeof url === 'string' && url.includes(oldUrl)) {
+      console.log('🔀 Redirigiendo XHR:', url);
+      url = url.replace(oldUrl, newUrl);
+    }
+    return originalOpen.call(this, method, url, ...args);
+  };
+  
+  console.log('✅ Parche de redirección instalado correctamente');
+})();
+"@
+        
+        # Crear script en la carpeta public
+        if (-not (Test-Path -Path "$workspaceDir\public")) {
+            New-Item -Path "$workspaceDir\public" -ItemType Directory -Force | Out-Null
+        }
+        
+        Set-Content -Path "$workspaceDir\public\fix-api-url.js" -Value $patchContent
+        Write-Host "   ✓ Script de parche creado en public/fix-api-url.js" -ForegroundColor Green
+        
+        # Actualizar index.html para incluir el script
+        if (Test-Path -Path "$workspaceDir\index.html") {
+            $indexContent = Get-Content -Path "$workspaceDir\index.html" -Raw
+            
+            if (-not $indexContent.Contains("fix-api-url.js")) {
+                $indexContent = $indexContent -replace "</head>", "  <script src=""%PUBLIC_URL%/fix-api-url.js""></script>`n  </head>"
+                Set-Content -Path "$workspaceDir\index.html" -Value $indexContent
+                Write-Host "   ✓ Script de parche añadido a index.html" -ForegroundColor Green
+            }
+        } else {
+            Write-Host "   ⚠️ No se encontró index.html en la raíz" -ForegroundColor Yellow
+        }
+    }
+}
+
+Write-Host "`n8. Instrucciones para limpiar la caché del navegador:" -ForegroundColor Yellow
+Write-Host "   1. Abre el archivo 'solucionar-404-comments.html' en tu navegador" -ForegroundColor White
+Write-Host "   2. Sigue las instrucciones para aplicar el parche o limpiar la caché" -ForegroundColor White
 Write-Host "   3. Verificar en modo incógnito: https://histostorias-desopilantes.web.app/historias" -ForegroundColor White
 
 # RESUMEN FINAL

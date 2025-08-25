@@ -1,20 +1,16 @@
-# Use Node.js 18 Alpine image
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Instalar dependencias
 COPY package*.json ./
+RUN npm install --production
 
-# Install dependencies
-RUN npm ci --only=production
-
-# Copy source code
+# Copiar código fuente
 COPY . .
 
-# Expose port
+# Exponer puerto (Railway configura PORT automáticamente)
 EXPOSE 8080
 
-# Start the application
-CMD ["node", "server-simple.js"]
+# Comando para iniciar la aplicación
+CMD ["node", "server.js"]

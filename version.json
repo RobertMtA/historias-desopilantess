@@ -1,0 +1,12 @@
+{
+  "version": "2.1.0-RAILWAY-FIXED",
+  "build": "2025-08-26-16-32-35",
+  "endpoints": [
+    "GET /api/test",
+    "GET /api/stories",
+    "GET /api/stories/:id/likes",
+    "POST /api/stories/:id/like", 
+    "PUT /api/stories/:id/like"
+  ],
+  "status": "ALL_ENDPOINTS_ACTIVE"
+}

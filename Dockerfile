@@ -1,18 +1,12 @@
-# Usar Node.js 18 oficial (más estable para producción)
 FROM node:18-alpine
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar servidor definitivo y package.json
-COPY servidor-definitivo.js .
-COPY package*.json ./
+COPY server/package*.json ./
+RUN npm ci --only=production
 
-# Instalar dependencias
-RUN npm install --production
+COPY server/ ./
 
-# Exponer el puerto que Railway utilizará
-EXPOSE 8080
+EXPOSE 3000
 
-# Comando para ejecutar el servidor definitivo
-CMD ["node", "servidor-definitivo.js"]
+CMD ["node", "server.js"]

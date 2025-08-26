@@ -21,16 +21,16 @@ async function initializeDatabase() {
   
   // Crear pool de conexión con configuración mejorada
   const pool = new Pool({
-    // Para Railway PostgreSQL, usar configuración específica
-    ...(isRailway ? {
+    // Usar DATABASE_URL si está disponible (más confiable)
+    ...(process.env.DATABASE_URL ? {
+      connectionString: process.env.DATABASE_URL,
+    } : isRailway ? {
+      // Fallback para Railway con variables individuales
       host: process.env.PGHOST || 'postgres-f5yt.railway.internal',
       port: parseInt(process.env.PGPORT || '5432'),
       database: process.env.PGDATABASE || 'railway',
       user: process.env.PGUSER || 'postgres',
-      // Para Railway, intentar sin contraseña
-      ...(process.env.PGPASSWORD ? { password: process.env.PGPASSWORD } : {})
-    } : process.env.DATABASE_URL ? {
-      connectionString: process.env.DATABASE_URL,
+      password: process.env.PGPASSWORD
     } : {
       // Fallback para desarrollo local
       connectionString: 'postgresql://postgres:postgres@localhost:5432/historias'

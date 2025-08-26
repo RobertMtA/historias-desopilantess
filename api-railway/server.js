@@ -32,12 +32,12 @@ const pool = new Pool({
   ...(process.env.DATABASE_URL && !shouldIgnoreManualVars ? {
     connectionString: process.env.DATABASE_URL,
   } : shouldIgnoreManualVars ? {
-    // Forzar uso de variables automáticas de Railway para PostgreSQL
-    connectionString: process.env.DATABASE_PRIVATE_URL || process.env.DATABASE_URL
+    // Forzar uso de DATABASE_URL de Railway para PostgreSQL
+    connectionString: process.env.DATABASE_URL
   } : process.env.PGHOST && !shouldIgnoreManualVars ? {
     // Variables individuales solo si no apuntan a localhost
     user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
+    password: process.env.PGPASSWORD || undefined, // Permitir contraseña vacía
     host: process.env.PGHOST,
     port: parseInt(process.env.PGPORT || '5432'),
     database: process.env.PGDATABASE

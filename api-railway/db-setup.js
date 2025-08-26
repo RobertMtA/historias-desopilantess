@@ -27,7 +27,7 @@ async function initializeDatabase() {
     } : process.env.PGHOST ? {
       // Variables individuales
       user: process.env.PGUSER,
-      password: process.env.PGPASSWORD,
+      password: process.env.PGPASSWORD || undefined, // Permitir contraseña vacía
       host: process.env.PGHOST,
       port: parseInt(process.env.PGPORT || '5432'),
       database: process.env.PGDATABASE

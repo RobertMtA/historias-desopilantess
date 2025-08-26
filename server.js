@@ -63,7 +63,7 @@ app.get('/api/test', (req, res) => {
     status: 'success',
     message: 'API de Historias Desopilantes funcionando correctamente',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '2.2.0-FIXED'
   });
 });
 
@@ -1108,4 +1108,5 @@ app.listen(PORT, () => {
   console.log(`   POST /api/stories/:id/like - Dar like`);
   console.log(`   PUT /api/stories/:id/like - Toggle like/unlike`);
 });
+
 

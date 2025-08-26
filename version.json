@@ -1,12 +1,12 @@
 {
-  "version": "2.1.0-RAILWAY-FIXED",
-  "build": "2025-08-26-16-32-35",
+  "version": "2.1.1-FORCE-REBUILD",
+  "timestamp": "'$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')'",
   "endpoints": [
     "GET /api/test",
     "GET /api/stories",
-    "GET /api/stories/:id/likes",
-    "POST /api/stories/:id/like", 
+    "GET /api/stories/:id/likes", 
+    "POST /api/stories/:id/like",
     "PUT /api/stories/:id/like"
   ],
-  "status": "ALL_ENDPOINTS_ACTIVE"
+  "status": "FORCED_REBUILD_ACTIVE"
 }

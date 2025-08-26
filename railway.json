@@ -1,7 +1,9 @@
 {
+  "build": {
+    "builder": "nixpacks"
+  },
   "deploy": {
-    "buildCommand": "npm install",
-    "startCommand": "npm start",
-    "healthcheckPath": "/api/test"
+    "startCommand": "node app.js",
+    "restartPolicyType": "always"
   }
 }

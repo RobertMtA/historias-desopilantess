@@ -1,24 +1,19 @@
 {
-  "name": "historias-desopilantes-railway-fixed",
-  "version": "2.1.0",
-  "description": "API FIXED para Railway con todos los endpoints funcionando",
+  "name": "historias-desopilantes-railway-forced",
+  "version": "2.1.1-FORCE-REBUILD",
+  "description": "FORCED REBUILD Railway deployment",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "build": "echo 'Railway build complete v2.1.0'"
+    "dev": "nodemon app.js"
   },
   "engines": {
-    "node": "18.x",
-    "npm": "9.x"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "pg": "^8.11.0",
     "dotenv": "^16.0.3"
-  },
-  "keywords": ["railway", "api", "express", "postgresql", "fixed"],
-  "author": "RobertMtA",
-  "license": "MIT"
+  }
 }

@@ -2,8 +2,7 @@
 cmds = ["npm install --production"]
 
 [phases.start]
-cmd = "npm start"
+cmd = "node app.js"
 
 [variables]
-PORT = "8080"
 NODE_ENV = "production"

@@ -19,23 +19,10 @@ async function initializeDatabase() {
   console.log('   PGDATABASE:', process.env.PGDATABASE);
   console.log('   RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
   
-  // Crear pool de conexión con configuración mejorada
+  // Crear pool de conexión - FORZAR el uso de DATABASE_URL
   const pool = new Pool({
-    // Usar DATABASE_URL si está disponible (más confiable)
-    ...(process.env.DATABASE_URL ? {
-      connectionString: process.env.DATABASE_URL,
-    } : isRailway ? {
-      // Fallback para Railway con variables individuales
-      host: process.env.PGHOST || 'postgres-f5yt.railway.internal',
-      port: parseInt(process.env.PGPORT || '5432'),
-      database: process.env.PGDATABASE || 'railway',
-      user: process.env.PGUSER || 'postgres',
-      password: process.env.PGPASSWORD
-    } : {
-      // Fallback para desarrollo local
-      connectionString: 'postgresql://postgres:postgres@localhost:5432/historias'
-    }),
-    // SSL configurado para Railway
+    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/historias',
+    // SSL configurado para Railway y Supabase
     ssl: (isProduction || isRailway) ? { rejectUnauthorized: false } : false
   });
   

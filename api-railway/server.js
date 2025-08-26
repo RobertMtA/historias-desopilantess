@@ -28,21 +28,9 @@ const shouldIgnoreManualVars = isRailway && process.env.PGHOST === 'localhost';
 
 // Configuración mejorada para Railway
 const pool = new Pool({
-  // Usar DATABASE_URL si está disponible (más confiable)
-  ...(process.env.DATABASE_URL ? {
-    connectionString: process.env.DATABASE_URL,
-  } : isRailway ? {
-    // Fallback para Railway con variables individuales
-    host: process.env.PGHOST || 'postgres-f5yt.railway.internal',
-    port: parseInt(process.env.PGPORT || '5432'),
-    database: process.env.PGDATABASE || 'railway',
-    user: process.env.PGUSER || 'postgres',
-    password: process.env.PGPASSWORD
-  } : {
-    // Fallback para desarrollo local
-    connectionString: 'postgresql://postgres:postgres@localhost:5432/historias'
-  }),
-  // SSL configurado correctamente para Railway
+  // FORZAR el uso de DATABASE_URL siempre que esté disponible
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/historias',
+  // SSL configurado correctamente para Railway y Supabase
   ssl: (isProduction || isRailway) ? { rejectUnauthorized: false } : false
 });
 

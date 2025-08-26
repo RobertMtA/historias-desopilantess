@@ -28,19 +28,16 @@ const shouldIgnoreManualVars = isRailway && process.env.PGHOST === 'localhost';
 
 // Configuración mejorada para Railway
 const pool = new Pool({
-  // Si estamos en Railway y tenemos variables que apuntan a localhost, usar solo DATABASE_URL automática
-  ...(process.env.DATABASE_URL && !shouldIgnoreManualVars ? {
-    connectionString: process.env.DATABASE_URL,
-  } : shouldIgnoreManualVars ? {
-    // Forzar uso de DATABASE_URL de Railway para PostgreSQL
-    connectionString: process.env.DATABASE_URL
-  } : process.env.PGHOST && !shouldIgnoreManualVars ? {
-    // Variables individuales solo si no apuntan a localhost
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD || undefined, // Permitir contraseña vacía
-    host: process.env.PGHOST,
+  // Para Railway PostgreSQL, usar configuración específica
+  ...(isRailway ? {
+    host: process.env.PGHOST || 'postgres-f5yt.railway.internal',
     port: parseInt(process.env.PGPORT || '5432'),
-    database: process.env.PGDATABASE
+    database: process.env.PGDATABASE || 'railway',
+    user: process.env.PGUSER || 'postgres',
+    // Para Railway, intentar sin contraseña
+    ...(process.env.PGPASSWORD ? { password: process.env.PGPASSWORD } : {})
+  } : process.env.DATABASE_URL ? {
+    connectionString: process.env.DATABASE_URL,
   } : {
     // Fallback para desarrollo local
     connectionString: 'postgresql://postgres:postgres@localhost:5432/historias'

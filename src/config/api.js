@@ -60,23 +60,18 @@ const API_CONFIG = {
   development: 'http://localhost:4000',
   
   // URL base para producción (Railway)
-  production: 'https://historias-desopilantes-react-production.up.railway.app',
+  production: 'https://historias-desopilantes-production.up.railway.app',
   
   // Función para obtener la URL base correcta
   getBaseURL: () => {
-    // Usar el servidor local si estamos en desarrollo, o Railway si estamos en producción
-    if (window.location.hostname === 'localhost') {
-      return API_CONFIG.development;
+    // Usar el servidor de Railway si estamos en Firebase o en producción
+    if (window.location.hostname.includes('web.app') || 
+        window.location.hostname.includes('firebaseapp.com') || 
+        process.env.NODE_ENV === 'production') {
+      return API_CONFIG.production;
     }
-    return API_CONFIG.production;
-    
-    // TODO: Restaurar lógica de desarrollo cuando se solucione servidor local
-    // if (window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
-    //   return API_CONFIG.production;
-    // }
-    // return process.env.NODE_ENV === 'production' 
-    //   ? API_CONFIG.production 
-    //   : API_CONFIG.development;
+    // Usar servidor local para desarrollo
+    return API_CONFIG.development;
   },
   
   // URLs completas de los endpoints

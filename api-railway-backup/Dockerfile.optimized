@@ -1,0 +1,21 @@
+# Base de Node.js LTS
+FROM node:18-alpine
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Variables de entorno
+ENV NODE_ENV=production
+
+# Instalar dependencias
+COPY package*.json ./
+RUN npm install
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto
+EXPOSE 3000
+
+# Script de inicio (usando el nuevo servidor con auto-inicialización)
+CMD ["node", "server-auto-init.js"]

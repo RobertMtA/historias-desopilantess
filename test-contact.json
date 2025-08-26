@@ -1,7 +1,0 @@
-{
-  "nombre": "Usuario de Prueba",
-  "email": "test@example.com",
-  "asunto": "Prueba de timeout optimizado",
-  "mensaje": "Este es un mensaje de prueba para verificar que el timeout esté optimizado y el envío de emails sea asíncrono.",
-  "tipoConsulta": "general"
-}

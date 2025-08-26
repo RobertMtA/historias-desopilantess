@@ -1,18 +1,18 @@
-# Usar Node.js 22 oficial
-FROM node:22-alpine
+# Usar Node.js 18 oficial (más estable para producción)
+FROM node:18-alpine
 
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
-COPY api-railway/package*.json ./api-railway/
-RUN cd api-railway && npm ci --only=production
+# Copiar servidor definitivo y package.json
+COPY servidor-definitivo.js .
+COPY package*.json ./
 
-# Copiar todos los archivos del servidor API
-COPY api-railway/ ./api-railway/
+# Instalar dependencias
+RUN npm install --production
 
-# Exponer el puerto
-EXPOSE 3009
+# Exponer el puerto que Railway utilizará
+EXPOSE 8080
 
-# Comando para ejecutar el servidor limpio
-CMD ["node", "api-railway/server.js"]
+# Comando para ejecutar el servidor definitivo
+CMD ["node", "servidor-definitivo.js"]

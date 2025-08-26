@@ -29,9 +29,13 @@ const AdminLogin = () => {
     setError('');
 
     try {
+      const apiUrl = buildApiUrl('/api/admin/auth/login');
       console.log('🔄 Intentando conectar al backend...');
+      console.log('🌐 URL generada:', apiUrl);
+      console.log('📍 Hostname actual:', window.location.hostname);
+      console.log('🎯 NODE_ENV:', process.env.NODE_ENV);
       
-      const response = await fetch(buildApiUrl('/api/admin/auth/login'), {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -61,16 +61,18 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       if (likesResponse.ok) {
         const likesData = await likesResponse.json();
         console.log('Likes data received:', likesData);
-        setLikes(likesData.count);
-        setIsLiked(likesData.userLiked);
+        setLikes(likesData.likes || 0); // Cambiar de count a likes
+        setIsLiked(likesData.hasLiked || false); // Cambiar de userLiked a hasLiked
       }
       
       // Obtener comentarios
       const commentsResponse = await fetch(buildApiUrl(`/api/stories/${storyId}/comments`));
       if (commentsResponse.ok) {
         const commentsData = await commentsResponse.json();
-        console.log('Comments data received:', commentsData.length, 'comments');
-        setComments(commentsData);
+        console.log('Comments data received:', commentsData);
+        // Verificar si commentsData es un array o tiene una propiedad comments
+        const commentsArray = Array.isArray(commentsData) ? commentsData : (commentsData.comments || []);
+        setComments(commentsArray);
       }
     } catch (error) {
       console.error('Error loading story data:', error);
@@ -78,29 +80,45 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
   };
 
   const handleLike = async () => {
+    // Optimistic update - actualizar UI inmediatamente
+    const newIsLiked = !isLiked;
+    const newLikes = newIsLiked ? likes + 1 : Math.max(0, likes - 1);
+    
+    setIsLiked(newIsLiked);
+    setLikes(newLikes);
+    
     try {
-      const response = await fetch(buildApiUrl(`/api/stories/${storyId}/like`), {
+      const response = await fetch(buildApiUrl(`/api/stories/${storyId}/likes`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ liked: !isLiked })
+        body: JSON.stringify({ liked: newIsLiked })
       });
 
       if (response.ok) {
         const data = await response.json();
-        setLikes(data.count);
-        setIsLiked(!isLiked);
+        // Actualizar con los datos reales del servidor
+        setLikes(data.likes);
+        setIsLiked(data.hasLiked);
+      } else {
+        // Revertir cambios si hay error
+        setIsLiked(isLiked);
+        setLikes(likes);
+        console.error('Error response:', response.status);
       }
     } catch (error) {
       console.error('Error updating like:', error);
+      // Revertir cambios si hay error
+      setIsLiked(isLiked);
+      setLikes(likes);
     }
   };
 
   // Función para detectar y filtrar contenido spam (URLs, enlaces maliciosos)
   const detectSpamContent = (text) => {
-    // Patrones de URLs y enlaces sospechosos
-    const urlPattern = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9-]+\.[a-zA-Z]{2,})/gi;
+    // Patrones de URLs más precisos (evitar falsos positivos con puntuación)
+    const urlPattern = /(https?:\/\/[^\s]+)|(www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})|([a-zA-Z0-9-]+\.[a-zA-Z]{2,}[^\s]*)/gi;
     const suspiciousPatterns = [
       /bit\.ly/i,
       /tinyurl/i,
@@ -117,9 +135,21 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       /limited.*time/i
     ];
 
-    // Verificar URLs
-    if (urlPattern.test(text)) {
-      return 'No se permiten enlaces en los comentarios para evitar spam.';
+    // Limpiar texto de puntuación común para evitar falsos positivos
+    const cleanText = text.replace(/[!?.,;:]+$/g, '');
+
+    // Verificar URLs solo en el texto limpio y que realmente parezcan dominios
+    const urlMatches = cleanText.match(urlPattern);
+    if (urlMatches) {
+      // Filtrar falsos positivos verificando que realmente sea un dominio
+      const realUrls = urlMatches.filter(match => {
+        // No debe ser solo una palabra con puntuación
+        return match.includes('/') || (match.includes('.') && match.length > 4 && !/^[a-zA-Z]+!*$/.test(match));
+      });
+      
+      if (realUrls.length > 0) {
+        return 'No se permiten enlaces en los comentarios para evitar spam.';
+      }
     }
 
     // Verificar patrones sospechosos
@@ -554,6 +584,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                     onChange={(e) => setUserName(e.target.value)}
                     className="comment-name-input"
                     maxLength="50"
+                    id={`modal-comment-name-${storyId}`}
+                    name="modalUserName"
                   />
                   <div className="comment-input-wrapper">
                     <textarea
@@ -563,6 +595,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                       className="comment-textarea"
                       maxLength="500"
                       rows="3"
+                      id={`modal-comment-text-${storyId}`}
+                      name="modalCommentText"
                     />
                     <button 
                       type="submit" 

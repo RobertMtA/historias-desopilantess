@@ -1,12 +1,11 @@
 [phases.setup]
-providers = ["node"]
-nodeVersion = "22.13.0"
+nixPkgs = ["nodejs", "postgresql"]
 
 [phases.install]
-cmds = ["npm ci --legacy-peer-deps"]
+cmds = ["npm install"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["echo 'Skipping build phase'"]
 
 [start]
 cmd = "node server.js"

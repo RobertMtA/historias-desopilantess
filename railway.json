@@ -1,9 +1,7 @@
 {
   "deploy": {
-    "buildCommand": "cd server && npm install",
-    "startCommand": "cd server && node server.js",
-    "healthcheckPath": "/api/test",
-    "healthcheckTimeout": 300,
-    "restartPolicy": "always"
+    "buildCommand": "npm install",
+    "startCommand": "npm start",
+    "healthcheckPath": "/api/test"
   }
 }

@@ -1,10 +1,9 @@
 {
   "deploy": {
+    "buildCommand": "cd server && npm install",
     "startCommand": "cd server && node server.js",
-    "restartPolicyType": "ON_FAILURE"
-  },
-  "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "cd server && npm install"
+    "healthcheckPath": "/api/test",
+    "healthcheckTimeout": 300,
+    "restartPolicy": "always"
   }
 }

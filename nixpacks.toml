@@ -1,11 +1,9 @@
-[phases.setup]
-nixPkgs = ['nodejs_18', 'npm']
-
-[phases.install]
-cmds = ['cd server && npm ci']
-
 [phases.build]
-cmds = ['echo "No build step needed for server"']
+cmds = ["cd server && npm install --production"]
 
-[start]
-cmd = 'cd server && node server.js'
+[phases.start]
+cmd = "cd server && node server.js"
+
+[variables]
+PORT = "8080"
+NODE_ENV = "production"

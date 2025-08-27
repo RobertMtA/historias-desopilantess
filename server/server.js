@@ -451,17 +451,17 @@ app.post(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res
     
     // UPSERT corregido - maneja duplicados automáticamente
     const upsertQuery = `
-      INSERT INTO story_interactions (historia_id, likes_count, dislikes_count) 
+      INSERT INTO story_interactions (historia_id, likes, dislikes) 
       VALUES ($1, $2, $3)
       ON CONFLICT (historia_id) 
       DO UPDATE SET 
-        likes_count = CASE 
-          WHEN $2::boolean = true THEN story_interactions.likes_count + 1 
-          ELSE story_interactions.likes_count 
+        likes = CASE 
+          WHEN $2::boolean = true THEN story_interactions.likes + 1 
+          ELSE story_interactions.likes 
         END,
-        dislikes_count = CASE 
-          WHEN $2::boolean = false THEN story_interactions.dislikes_count + 1 
-          ELSE story_interactions.dislikes_count 
+        dislikes = CASE 
+          WHEN $2::boolean = false THEN story_interactions.dislikes + 1 
+          ELSE story_interactions.dislikes 
         END,
         updated_at = CURRENT_TIMESTAMP
       RETURNING *`;
@@ -476,9 +476,9 @@ app.post(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res
     const totalsQuery = `
       SELECT 
         historia_id,
-        likes_count,
-        dislikes_count,
-        (likes_count + dislikes_count) as total_interactions
+        likes,
+        dislikes,
+        (likes + dislikes) as total_interactions
       FROM story_interactions 
       WHERE historia_id = $1`;
     
@@ -488,7 +488,7 @@ app.post(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res
       success: true,
       story_id: id,
       action: liked ? 'liked' : 'disliked',
-      totals: totals.rows[0] || { likes_count: 0, dislikes_count: 0, total_interactions: 0 }
+      totals: totals.rows[0] || { likes: 0, dislikes: 0, total_interactions: 0 }
     });
 
   } catch (error) {
@@ -508,12 +508,12 @@ app.put('/api/stories/:id/like', async (req, res) => {
 
     // UPSERT con toggle lógico corregido
     const toggleQuery = `
-      INSERT INTO story_interactions (historia_id, likes_count, dislikes_count) 
+      INSERT INTO story_interactions (historia_id, likes, dislikes) 
       VALUES ($1, 1, 0)
       ON CONFLICT (historia_id) 
       DO UPDATE SET 
-        likes_count = CASE 
-          WHEN story_interactions.likes_count > 0 THEN 0 
+        likes = CASE 
+          WHEN story_interactions.likes > 0 THEN 0 
           ELSE 1 
         END,
         updated_at = CURRENT_TIMESTAMP
@@ -524,11 +524,11 @@ app.put('/api/stories/:id/like', async (req, res) => {
     res.json({
       success: true,
       story_id: storyId,
-      action: result.rows[0].likes_count > 0 ? 'liked' : 'unliked',
+      action: result.rows[0].likes > 0 ? 'liked' : 'unliked',
       totals: {
-        likes_count: result.rows[0].likes_count,
-        dislikes_count: result.rows[0].dislikes_count,
-        total_interactions: result.rows[0].likes_count + result.rows[0].dislikes_count
+        likes: result.rows[0].likes,
+        dislikes: result.rows[0].dislikes,
+        total_interactions: result.rows[0].likes + result.rows[0].dislikes
       }
     });
 
@@ -964,17 +964,17 @@ app.post('/api/stories/:id/like', async (req, res) => {
 
     // UPSERT corregido - maneja duplicados automáticamente
     const upsertQuery = `
-      INSERT INTO story_interactions (historia_id, likes_count, dislikes_count) 
+      INSERT INTO story_interactions (historia_id, likes, dislikes) 
       VALUES ($1, $2, $3)
       ON CONFLICT (historia_id) 
       DO UPDATE SET 
-        likes_count = CASE 
-          WHEN $2::boolean = true THEN story_interactions.likes_count + 1 
-          ELSE story_interactions.likes_count 
+        likes = CASE 
+          WHEN $2::boolean = true THEN story_interactions.likes + 1 
+          ELSE story_interactions.likes 
         END,
-        dislikes_count = CASE 
-          WHEN $2::boolean = false THEN story_interactions.dislikes_count + 1 
-          ELSE story_interactions.dislikes_count 
+        dislikes = CASE 
+          WHEN $2::boolean = false THEN story_interactions.dislikes + 1 
+          ELSE story_interactions.dislikes 
         END,
         updated_at = CURRENT_TIMESTAMP
       RETURNING *`;
@@ -989,9 +989,9 @@ app.post('/api/stories/:id/like', async (req, res) => {
     const totalsQuery = `
       SELECT 
         historia_id,
-        likes_count,
-        dislikes_count,
-        (likes_count + dislikes_count) as total_interactions
+        likes,
+        dislikes,
+        (likes + dislikes) as total_interactions
       FROM story_interactions 
       WHERE historia_id = $1`;
     
@@ -1001,7 +1001,7 @@ app.post('/api/stories/:id/like', async (req, res) => {
       success: true,
       story_id: storyId,
       action: liked ? 'liked' : 'disliked',
-      totals: totals.rows[0] || { likes_count: 0, dislikes_count: 0, total_interactions: 0 }
+      totals: totals.rows[0] || { likes: 0, dislikes: 0, total_interactions: 0 }
     });
 
   } catch (error) {
@@ -1021,12 +1021,12 @@ app.put('/api/stories/:id/like', async (req, res) => {
 
     // UPSERT con toggle lógico corregido
     const toggleQuery = `
-      INSERT INTO story_interactions (historia_id, likes_count, dislikes_count) 
+      INSERT INTO story_interactions (historia_id, likes, dislikes) 
       VALUES ($1, 1, 0)
       ON CONFLICT (historia_id) 
       DO UPDATE SET 
-        likes_count = CASE 
-          WHEN story_interactions.likes_count > 0 THEN 0 
+        likes = CASE 
+          WHEN story_interactions.likes > 0 THEN 0 
           ELSE 1 
         END,
         updated_at = CURRENT_TIMESTAMP
@@ -1037,11 +1037,11 @@ app.put('/api/stories/:id/like', async (req, res) => {
     res.json({
       success: true,
       story_id: storyId,
-      action: result.rows[0].likes_count > 0 ? 'liked' : 'unliked',
+      action: result.rows[0].likes > 0 ? 'liked' : 'unliked',
       totals: {
-        likes_count: result.rows[0].likes_count,
-        dislikes_count: result.rows[0].dislikes_count,
-        total_interactions: result.rows[0].likes_count + result.rows[0].dislikes_count
+        likes: result.rows[0].likes,
+        dislikes: result.rows[0].dislikes,
+        total_interactions: result.rows[0].likes + result.rows[0].dislikes
       }
     });
 

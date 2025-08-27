@@ -449,81 +449,27 @@ app.get([
 app.post([
   '/api/historias/:id/likes',
   '/api/stories/:id/likes',
-  '/api/stories/:id/like' // <-- compatibilidad frontend
+  '/api/stories/:id/like'
 ], async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const { liked } = req.body;
-    
-    console.log(`Processing like for story ${id}, liked: ${liked}`);
-    
-    // Verificar si la historia existe
-    const checkResult = await pool.query('SELECT EXISTS(SELECT 1 FROM historias WHERE id = $1)', [id]);
-    const exists = checkResult.rows[0].exists;
-    
-    if (!exists) {
-      return res.json({
-        storyId: parseInt(id),
-        likes: 0,
-        hasLiked: false,
-        exists: false
-      });
-    }
-    
-    try {
-      // Obtener o crear registro de interacciones
-      const result = await pool.query(`
-        INSERT INTO story_interactions (historia_id, likes)
-        VALUES ($1, $2)
-        ON CONFLICT (historia_id) 
-        DO UPDATE SET likes = CASE 
-          WHEN $2 THEN story_interactions.likes + 1
-          ELSE GREATEST(0, story_interactions.likes - 1)
-        END
-        RETURNING likes
-      `, [id, liked ? 1 : 0]);
-      
-      const newLikes = result.rows[0].likes;
-      
-      res.json({
-        storyId: parseInt(id),
-        likes: newLikes,
-        hasLiked: liked,
-        exists: true
-      });
-    } catch (dbError) {
-      console.error('Database error:', dbError);
-      
-      // Crear tabla si no existe
-      await pool.query(`
-        CREATE TABLE IF NOT EXISTS story_interactions (
-          id SERIAL PRIMARY KEY,
-          historia_id INTEGER NOT NULL UNIQUE,
-          likes INTEGER DEFAULT 0,
-          views INTEGER DEFAULT 0
-        )
-      `);
-      
-      // Reintentar la operación
-      const initialLikes = liked ? 1 : 0;
-      await pool.query(`
-        INSERT INTO story_interactions (historia_id, likes)
-        VALUES ($1, $2)
-      `, [id, initialLikes]);
-      
-      res.json({
-        storyId: parseInt(id),
-        likes: initialLikes,
-        hasLiked: liked,
-        exists: true
-      });
-    }
-  } catch (error) {
-    console.error('Error general dando like:', error);
-    res.status(500).json({
-      error: 'Internal server error',
-      message: error.message
+    // UPSERT: si existe, suma 1; si no, crea el registro
+    await pool.query(`
+      INSERT INTO story_interactions (historia_id, likes)
+      VALUES ($1, 1)
+      ON CONFLICT (historia_id)
+      DO UPDATE SET likes = story_interactions.likes + 1
+    `, [id]);
+    const result = await pool.query('SELECT * FROM story_interactions WHERE historia_id = $1', [id]);
+    res.json({
+      storyId: id,
+      likes: result.rows[0].likes,
+      hasLiked: true,
+      exists: true
     });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al dar like', message: error.message });
   }
 });
 

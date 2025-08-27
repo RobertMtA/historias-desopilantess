@@ -345,7 +345,11 @@ app.post(['/api/historias/:id/comentarios', '/api/stories/:id/comments'], async 
 // ENDPOINTS PARA LIKES
 
 // Obtener likes de una historia
-app.get(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res) => {
+app.get([
+  '/api/historias/:id/likes',
+  '/api/stories/:id/likes',
+  '/api/stories/:id/like' // <-- AGREGAR ESTA LÍNEA
+], async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -442,7 +446,11 @@ app.get(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res)
 });
 
 // Dar like a una historia
-app.post(['/api/historias/:id/likes', '/api/stories/:id/likes'], async (req, res) => {
+app.post([
+  '/api/historias/:id/likes',
+  '/api/stories/:id/likes',
+  '/api/stories/:id/like' // <-- AGREGAR ESTA LÍNEA
+], async (req, res) => {
   try {
     const { id } = req.params;
     const { liked } = req.body;

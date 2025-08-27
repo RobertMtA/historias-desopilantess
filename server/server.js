@@ -453,8 +453,7 @@ app.post([
 ], async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { liked } = req.body;
-    // UPSERT: si existe, suma 1; si no, crea el registro
+    // UPSERT: suma 1 si existe, crea si no existe
     await pool.query(`
       INSERT INTO story_interactions (historia_id, likes)
       VALUES ($1, 1)

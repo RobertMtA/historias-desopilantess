@@ -348,10 +348,10 @@ app.post(['/api/historias/:id/comentarios', '/api/stories/:id/comments'], async 
 app.get([
   '/api/historias/:id/likes',
   '/api/stories/:id/likes',
-  '/api/stories/:id/like'
+  '/api/stories/:id/like' // <-- compatibilidad frontend
 ], async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
     
     // Verificar si la historia existe
     const checkResult = await pool.query('SELECT EXISTS(SELECT 1 FROM historias WHERE id = $1)', [id]);
@@ -449,10 +449,10 @@ app.get([
 app.post([
   '/api/historias/:id/likes',
   '/api/stories/:id/likes',
-  '/api/stories/:id/like'
+  '/api/stories/:id/like' // <-- compatibilidad frontend
 ], async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id);
     const { liked } = req.body;
     
     console.log(`Processing like for story ${id}, liked: ${liked}`);

@@ -348,7 +348,7 @@ app.post(['/api/historias/:id/comentarios', '/api/stories/:id/comments'], async 
 app.get([
   '/api/historias/:id/likes',
   '/api/stories/:id/likes',
-  '/api/stories/:id/like' // <-- AGREGAR ESTA LÍNEA
+  '/api/stories/:id/like'
 ], async (req, res) => {
   try {
     const { id } = req.params;
@@ -449,7 +449,7 @@ app.get([
 app.post([
   '/api/historias/:id/likes',
   '/api/stories/:id/likes',
-  '/api/stories/:id/like' // <-- AGREGAR ESTA LÍNEA
+  '/api/stories/:id/like'
 ], async (req, res) => {
   try {
     const { id } = req.params;

@@ -1109,3 +1109,4 @@ app.listen(PORT, () => {
   console.log(`   PUT /api/stories/:id/like - Toggle like/unlike`);
 });
 
+// Frontend compatibility 14:07:38

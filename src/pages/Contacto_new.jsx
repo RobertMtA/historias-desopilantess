@@ -64,23 +64,37 @@ const Contacto = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
-    // Simular envío del formulario
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitStatus('success');
-      setFormData({ nombre: '', email: '', asunto: '', mensaje: '', tipoConsulta: 'general' });
-      setErrors({});
-      
-      // Limpiar el mensaje después de 5 segundos
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ nombre: '', email: '', asunto: '', mensaje: '', tipoConsulta: 'general' });
+        setErrors({});
+        setTimeout(() => setSubmitStatus(null), 5000);
+      } else {
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus(null), 5000);
+      }
+    } catch (error) {
+      setSubmitStatus('error');
       setTimeout(() => setSubmitStatus(null), 5000);
-    }, 2000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

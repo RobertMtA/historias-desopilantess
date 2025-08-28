@@ -1053,6 +1053,53 @@ app.put('/api/stories/:id/like', async (req, res) => {
   }
 });
 
+// Ejemplo para comentarios
+app.post('/api/stories/:id/comments', async (req, res) => {
+  const { id } = req.params;
+  const { nombre, comentario } = req.body;
+
+  try {
+    // Verifica si la historia existe
+    const historia = await db.query('SELECT 1 FROM historias WHERE id = $1', [id]);
+    if (historia.rowCount === 0) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+
+    // Inserta el comentario
+    await db.query(
+      'INSERT INTO comentarios (historia_id, nombre, comentario) VALUES ($1, $2, $3)',
+      [id, nombre, comentario]
+    );
+    res.status(201).json({ message: 'Comentario agregado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al agregar comentario' });
+  }
+});
+
+// Ejemplo para likes
+app.post('/api/stories/:id/like', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Verifica si la historia existe
+    const historia = await db.query('SELECT 1 FROM historias WHERE id = $1', [id]);
+    if (historia.rowCount === 0) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+
+    // Lógica para sumar el like (ajusta según tu tabla)
+    await db.query(
+      `INSERT INTO story_interactions (historia_id, likes)
+       VALUES ($1, 1)
+       ON CONFLICT (historia_id) DO UPDATE SET likes = story_interactions.likes + 1`,
+      [id]
+    );
+    res.status(200).json({ message: 'Like agregado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al agregar like' });
+  }
+});
+
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor API iniciado en puerto ${PORT}`);

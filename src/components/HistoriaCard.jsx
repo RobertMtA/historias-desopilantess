@@ -444,7 +444,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                         })}
                       </span>
                     </div>
-                    <p className="comment-text">{comment.comment}</p>
+                    <p className="comment-text">{comment.text}</p>
                   </div>
                 ))}
                 
@@ -634,7 +634,7 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
                             })}
                           </span>
                         </div>
-                        <p className="comment-text">{comment.comment}</p>
+                        <p className="comment-text">{comment.text}</p>
                       </div>
                     ))}
                     

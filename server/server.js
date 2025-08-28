@@ -1111,3 +1111,48 @@ app.listen(PORT, () => {
 
 // Frontend compatibility 14:07:38
 // ROUTES COMPATIBILITY FIX 14:10:14
+
+// Configuración de nodemailer
+const nodemailer = require('nodemailer');
+
+// Crear transportador reutilizable
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: process.env.SMTP_SECURE === 'true', // true para 465, false para otros puertos
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
+
+// Endpoint de contacto
+app.post('/api/contact', async (req, res) => {
+  console.log('🟢 Entrando a /api/contact');
+  const name = req.body.name || req.body.nombre || 'Anónimo';
+  const email = req.body.email;
+  const message = req.body.message || req.body.mensaje || '';
+  const subject = req.body.subject || req.body.asunto || 'Nuevo mensaje de contacto';
+  const tipoConsulta = req.body.tipoConsulta || '';
+
+  if (!name || !email || !message) {
+    console.log('🔴 Faltan campos requeridos');
+    return res.status(400).json({ status: 'error', message: 'Faltan campos requeridos' });
+  }
+
+  try {
+    console.log('🟡 Enviando email...');
+    const info = await transporter.sendMail({
+      from: `"${name}" <${email}>`,
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+      subject: `[${tipoConsulta ? tipoConsulta.toUpperCase() : 'General'}] ${subject}`,
+      text: `Nombre: ${name}\nEmail: ${email}\nTipo: ${tipoConsulta}\nAsunto: ${subject}\nMensaje:\n${message}`,
+      html: `<b>Nombre:</b> ${name}<br><b>Email:</b> ${email}<br><b>Tipo:</b> ${tipoConsulta}<br><b>Asunto:</b> ${subject}<br><b>Mensaje:</b><br>${message.replace(/\n/g, '<br>')}`
+    });
+    console.log('✅ Email enviado:', info);
+    res.json({ status: 'success', message: 'Mensaje enviado correctamente' });
+  } catch (error) {
+    console.error('❌ Error enviando email de contacto:', error);
+    res.status(500).json({ status: 'error', message: 'No se pudo enviar el mensaje', error: error.message });
+  }
+});

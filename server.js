@@ -10,6 +10,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 require('dotenv').config();
 
 // Crear la aplicación Express
@@ -75,6 +76,30 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+// Función para enviar email de contacto usando Brevo (ex SendinBlue)
+async function enviarEmailContacto({ nombre, email, asunto, mensaje, tipoConsulta }) {
+  const sendSmtpEmail = {
+    to: [{ email: process.env.CONTACT_EMAIL }],
+    sender: { name: nombre, email: email },
+    subject: asunto,
+    htmlContent: `
+      <h3>Nuevo mensaje de contacto</h3>
+      <p><b>Nombre:</b> ${nombre}</p>
+      <p><b>Email:</b> ${email}</p>
+      <p><b>Tipo de consulta:</b> ${tipoConsulta}</p>
+      <p><b>Mensaje:</b><br>${mensaje}</p>
+    `,
+  };
+
+  return apiInstance.sendTransacEmail(sendSmtpEmail);
+}
+
 // ENDPOINTS DE LA API
 
 // Endpoint de prueba
@@ -101,14 +126,10 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
-    const info = await transporter.sendMail({
-      from: `"${name}" <${email}>`,
-      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
-      subject: `[${tipoConsulta ? tipoConsulta.toUpperCase() : 'General'}] ${subject}`,
-      text: `Nombre: ${name}\nEmail: ${email}\nTipo: ${tipoConsulta}\nAsunto: ${subject}\nMensaje:\n${message}`,
-      html: `<b>Nombre:</b> ${name}<br><b>Email:</b> ${email}<br><b>Tipo:</b> ${tipoConsulta}<br><b>Asunto:</b> ${subject}<br><b>Mensaje:</b><br>${message.replace(/\n/g, '<br>')}`
-    });
-    console.log('✅ Email enviado:', info);
+    // Enviar email usando Brevo (SendinBlue)
+    await enviarEmailContacto({ nombre: name, email, asunto: subject, mensaje: message, tipoConsulta });
+    
+    console.log('✅ Email enviado a través de Brevo');
     res.json({ status: 'success', message: 'Mensaje enviado correctamente' });
   } catch (error) {
     console.error('❌ Error enviando email de contacto:', error);

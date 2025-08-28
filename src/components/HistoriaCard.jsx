@@ -229,8 +229,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
       const response = await fetch(buildApiUrl(`/api/stories/${storyId}/comments`));
       if (response.ok) {
         const data = await response.json();
-        setComments(data);
-        setVisibleCommentsCount(3); // Resetear al mostrar los comentarios
+        setComments(data.comments || []); // <-- CORREGIDO
+        setVisibleCommentsCount(3);
       }
     } catch (error) {
       console.error('Error loading comments:', error);
@@ -429,8 +429,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
               <div className="comments-loading">Cargando comentarios...</div>
             ) : comments.length > 0 ? (
               <>
-                {comments.slice(0, visibleCommentsCount).map((comment, index) => (
-                  <div key={index} className="comment-item">
+                {comments.slice(0, visibleCommentsCount).map((comment) => (
+                  <div key={comment.id} className="comment-item">
                     <div className="comment-header">
                       <FaUser className="comment-user-icon" />
                       <span className="comment-username">{comment.userName}</span>
@@ -619,8 +619,8 @@ const HistoriaCard = ({ id, titulo, contenido, imagen, video, pais, año, catego
               <div className="comments-list">
                 {comments.length > 0 ? (
                   <>
-                    {comments.slice(0, visibleCommentsCount).map((comment, index) => (
-                      <div key={index} className="comment-item">
+                    {comments.slice(0, visibleCommentsCount).map((comment) => (
+                      <div key={comment.id} className="comment-item">
                         <div className="comment-header">
                           <FaUser className="comment-user-icon" />
                           <span className="comment-username">{comment.userName}</span>

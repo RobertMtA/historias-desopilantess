@@ -1,6 +1,6 @@
 {
   "name": "historias-desopilantes-final-fix",
-  "version": "2.2.0-FINAL-FIX", 
+  "version": "2.2.0-FINAL-FIX",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,9 +9,10 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "cors": "^2.8.5", 
-    "pg": "^8.11.0",
-    "dotenv": "^16.0.3"
+    "nodemailer": "^7.0.5",
+    "pg": "^8.11.0"
   }
 }

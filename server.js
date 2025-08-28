@@ -9,6 +9,7 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // Crear la aplicación Express
@@ -28,7 +29,8 @@ const pool = new Pool({
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'
+  ]
 }));
 
 // Middleware para parsing JSON
@@ -55,6 +57,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// --- CONFIGURACIÓN DE NODEMAILER ---
+// Configura tus credenciales SMTP en variables de entorno
+// Ejemplo para Gmail:
+// process.env.SMTP_HOST = 'smtp.gmail.com'
+// process.env.SMTP_PORT = 465
+// process.env.SMTP_USER = 'tucorreo@gmail.com'
+// process.env.SMTP_PASS = 'tu-contraseña-o-app-password'
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT) || 465,
+  secure: true,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
+
 // ENDPOINTS DE LA API
 
 // Endpoint de prueba
@@ -65,6 +85,28 @@ app.get('/api/test', (req, res) => {
     timestamp: new Date().toISOString(),
     version: '2.2.0-FIXED'
   });
+});
+
+// --- ENDPOINT PARA CONTACTO (envío de emails) ---
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ status: 'error', message: 'Faltan campos requeridos' });
+  }
+
+  try {
+    await transporter.sendMail({
+      from: `"${name}" <${email}>`,
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER, // destinatario
+      subject: 'Nuevo mensaje de contacto',
+      text: `Nombre: ${name}\nEmail: ${email}\nMensaje:\n${message}`,
+      html: `<b>Nombre:</b> ${name}<br><b>Email:</b> ${email}<br><b>Mensaje:</b><br>${message.replace(/\n/g, '<br>')}`
+    });
+    res.json({ status: 'success', message: 'Mensaje enviado correctamente' });
+  } catch (error) {
+    console.error('Error enviando email de contacto:', error);
+    res.status(500).json({ status: 'error', message: 'No se pudo enviar el mensaje' });
+  }
 });
 
 // ENDPOINTS PARA HISTORIAS

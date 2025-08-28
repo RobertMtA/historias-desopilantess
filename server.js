@@ -1149,6 +1149,8 @@ app.put('/api/stories/:id/like', async (req, res) => {
   }
 });
 
+// commit de prueba 28-08-2025
+
 // Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor API iniciado en puerto ${PORT}`);

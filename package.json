@@ -1,9 +1,9 @@
 {
   "name": "historias-desopilantes-final-fix",
   "version": "2.2.0-FINAL-FIX",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "engines": {
     "node": ">=18.0.0"

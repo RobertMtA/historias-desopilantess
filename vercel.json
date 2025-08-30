@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "historias-desopilantes-api",
   "builds": [
     {
       "src": "app.js",
@@ -9,11 +8,13 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/(.*)",
       "dest": "/app.js"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
+  "functions": {
+    "app.js": {
+      "maxDuration": 10
+    }
   }
 }
